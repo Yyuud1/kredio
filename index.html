@@ -166,6 +166,7 @@
 .topup-form .more-options summary{padding:12px 0}
 .topup-form .form-bottom{margin-top:15px}
 .topup-form .rate-inline{margin-bottom:11px}
+.cost-editor{grid-column:1/-1;min-width:0}.cost-heading{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}.cost-heading label{margin:0}.cost-add{font-size:21px}.cost-list{display:grid;gap:8px}.cost-row{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr) 30px;align-items:center;gap:8px}.cost-remove{width:30px;height:30px;font-size:20px;background:transparent;color:#888}.cost-total{display:flex;justify-content:space-between;gap:12px;font-size:10px;color:#858585;margin-top:9px}.cost-total strong{color:#555;font-weight:500;font-variant-numeric:tabular-nums}.cost-detail{border-top:1px solid var(--line);margin-top:14px;padding-top:12px}.cost-detail>span{font-size:10px;color:#888}.cost-detail dl{margin:8px 0 0;display:grid;gap:7px}.cost-detail dl>div{display:flex;justify-content:space-between;gap:12px;font-size:10px;color:#777}.cost-detail dt{overflow-wrap:anywhere;min-width:0}.cost-detail dd{margin:0;white-space:nowrap;font-variant-numeric:tabular-nums}@media(max-width:400px){.cost-row{gap:5px;grid-template-columns:minmax(0,1fr) minmax(0,1fr) 26px}.cost-remove{width:26px}.cost-row input{padding-inline:8px}}
 .topup-method{margin:0 0 16px}.topup-method label{display:block;margin:0 0 7px;font-size:11px;color:#595959}.topup-method select{width:100%;min-height:43px;border:1px solid #e3e3e3;border-radius:9px;background:#fff;padding:9px 12px;font-size:12px;cursor:pointer}.topup-method select:focus-visible{outline:2px solid #777;outline-offset:2px}
 .topup-form .coming-soon{min-height:260px}
 .topup-hint{font-size:10px;line-height:1.6;color:#929292;margin:0 0 15px}
@@ -213,7 +214,7 @@
 <details class="more-options" id="moreOptions"><summary><span><i class="fi fi-rr-list" aria-hidden="true"></i>Detail tambahan</span><i class="fi fi-rr-angle-small-down" aria-hidden="true"></i></summary><div class="details-body"><div class="field-grid">
 <div class="field"><label for="startDate">Tanggal pencairan</label><div class="input-shell"><input id="startDate" type="date" aria-describedby="startDateError"></div><p class="field-error" id="startDateError"></p></div>
 <div class="field"><label for="existing">Angsuran lain per bulan</label><div class="input-shell"><span class="prefix">Rp</span><input id="existing" class="money" inputmode="numeric" maxlength="19" placeholder="0" aria-describedby="existingHint existingError"></div><p class="field-hint" id="existingHint"></p><p class="field-error" id="existingError"></p></div>
-<div class="field"><label for="otherCosts">Biaya tambahan</label><div class="input-shell"><span class="prefix">Rp</span><input id="otherCosts" class="money" inputmode="numeric" maxlength="19" placeholder="0" aria-describedby="otherCostsHint otherCostsError"></div><p class="field-hint" id="otherCostsHint"></p><p class="field-error" id="otherCostsError"></p></div>
+<div class="field cost-editor" data-cost-editor="new"><div class="cost-heading"><label for="otherCosts">Biaya tambahan</label><button type="button" class="icon-button cost-add" data-cost-add="new" aria-label="Tambah biaya tambahan" title="Tambah biaya"><span aria-hidden="true">+</span></button></div><div id="newCostList" class="cost-list"><div class="cost-row" data-cost-row><div class="input-shell"><input data-cost-name type="text" maxlength="60" placeholder="Nama biaya" aria-label="Nama biaya tambahan 1"></div><div class="input-shell"><span class="prefix">Rp</span><input id="otherCosts" data-cost-amount inputmode="decimal" placeholder="0" aria-label="Nominal biaya tambahan 1"></div><button type="button" class="icon-button cost-remove" aria-label="Hapus biaya tambahan 1" title="Hapus biaya"><span aria-hidden="true">×</span></button></div></div><div class="cost-total"><span>Total biaya tambahan</span><strong id="newCostTotal">Rp0,00</strong></div><p class="field-hint">Masuk DSR dan potongan pencairan.</p><p class="field-error" id="otherCostsError"></p></div>
 <div class="field pppk-only" hidden><label for="employment">Status PPPK</label><div class="input-shell"><select id="employment"><option value="full">Penuh waktu</option><option value="part">Paruh waktu</option></select></div></div>
 <div class="field pppk-only" hidden><label for="slik">Kondisi SLIK</label><div class="input-shell"><select id="slik" aria-describedby="slikError"><option value="clear">Lancar / tanpa fasilitas</option><option value="review">Bermasalah di lembaga lain</option></select></div><p class="field-error" id="slikError"></p></div>
 </div><div id="slikReviewedField" hidden><div class="check-row"><input type="checkbox" id="slikReviewed"><label for="slikReviewed">Persyaratan khusus SLIK sudah diperiksa analis</label></div><p class="field-hint">Plafon dibatasi Rp100 juta. Mengikuti persyaratan Bab III, pasal 3.3.</p><p class="field-error" id="slikReviewedError"></p></div><div class="promo-option" role="group" aria-labelledby="promoTitle"><div class="promo-title-row"><span id="promoTitle">Pembebasan biaya</span><span class="promo-tag">Promo</span></div><div class="promo-grid"><label class="promo-choice" for="promoProvision"><input type="checkbox" id="promoProvision" checked><span>Provisi</span></label><label class="promo-choice" for="promoAdmin"><input type="checkbox" id="promoAdmin" checked><span>Administrasi</span></label><label class="promo-choice" for="promoPrint"><input type="checkbox" id="promoPrint" checked><span>Biaya cetak</span></label><label class="promo-choice" for="promoBlock"><input type="checkbox" id="promoBlock" checked><span>Dana blokir</span></label></div><p class="promo-help">Centang komponen yang dibebaskan sesuai promo berlaku.</p></div><p class="detail-note">Angsuran pertama disimulasikan satu bulan setelah pencairan.</p></div></details>
@@ -222,7 +223,7 @@
 </section>
 <aside class="result-column" aria-label="Hasil simulasi">
 <section class="payment-card"><div class="payment-top"><span id="resultProduct">PNS · KKS10</span><i class="fi fi-rr-calculator" aria-hidden="true"></i></div><p class="payment-label">Angsuran per bulan</p><div class="payment-value" id="paymentValue"><span class="currency-label">Rp</span><span id="paymentAmount">—</span></div><p class="payment-caption" id="paymentCaption"></p><div class="payment-meta"><div><span>Jangka waktu</span><strong id="resultTenor">—</strong></div><div><span>Bunga anuitas</span><strong id="resultRate">—</strong></div></div></section>
-<section class="breakdown-card" aria-labelledby="breakdownTitle"><div class="section-heading"><h2 id="breakdownTitle">Rincian pencairan</h2><span class="section-index">02</span></div><dl class="fee-list"><div><dt>Plafon pinjaman</dt><dd id="feePrincipal">—</dd></div><div><dt>Provisi <span id="provisionHint">0,5%</span></dt><dd id="feeProvision">—</dd></div><div><dt>Administrasi <span id="adminHint"></span></dt><dd id="feeAdmin">—</dd></div><div><dt>Biaya cetak <span id="printHint" hidden>promo</span></dt><dd id="feePrint">—</dd></div><div><dt>Asuransi</dt><dd id="feeInsurance">—</dd></div><div id="otherFeeRow" hidden><dt>Biaya tambahan</dt><dd id="feeOther">—</dd></div><div><dt>Dana blokir <span id="blockHint">½× angsuran</span></dt><dd id="feeBlock">—</dd></div></dl><p class="promo-applied" id="promoApplied" hidden></p><div class="net-cash"><div><span id="netLabel">Dana bersih diterima</span><i class="fi fi-rr-wallet" aria-hidden="true"></i></div><strong id="netValue">—</strong><p id="netNote">Setelah biaya dan dana blokir.</p></div><div class="salary-remainder"><span>Sisa gaji debitur / bulan</span><strong id="remainingSalary">—</strong><small>Gaji bersih − angsuran lain − angsuran baru</small></div></section>
+<section class="breakdown-card" aria-labelledby="breakdownTitle"><div class="section-heading"><h2 id="breakdownTitle">Rincian pencairan</h2><span class="section-index">02</span></div><dl class="fee-list"><div><dt>Plafon pinjaman</dt><dd id="feePrincipal">—</dd></div><div><dt>Provisi <span id="provisionHint">0,5%</span></dt><dd id="feeProvision">—</dd></div><div><dt>Administrasi <span id="adminHint"></span></dt><dd id="feeAdmin">—</dd></div><div><dt>Biaya cetak <span id="printHint" hidden>promo</span></dt><dd id="feePrint">—</dd></div><div><dt>Asuransi</dt><dd id="feeInsurance">—</dd></div><div id="otherFeeRow" hidden><dt>Biaya tambahan</dt><dd id="feeOther">—</dd></div><div><dt>Dana blokir <span id="blockHint">½× angsuran</span></dt><dd id="feeBlock">—</dd></div></dl><div class="cost-detail" id="newCostDetails" hidden></div><p class="promo-applied" id="promoApplied" hidden></p><div class="net-cash"><div><span id="netLabel">Dana bersih diterima</span><i class="fi fi-rr-wallet" aria-hidden="true"></i></div><strong id="netValue">—</strong><p id="netNote">Setelah biaya dan dana blokir.</p></div><div class="salary-remainder"><span>Sisa gaji debitur / bulan</span><strong id="remainingSalary">—</strong><small>Gaji bersih − angsuran baru − angsuran lain − biaya tambahan</small></div></section>
 <div class="result-actions"><button type="button" class="secondary-button" id="scheduleButton" disabled><i class="fi fi-rr-calendar" aria-hidden="true"></i>Jadwal angsuran</button><button type="button" class="secondary-button print-button" id="printButton" disabled><i class="fi fi-rr-print" aria-hidden="true"></i><span>Cetak</span></button><button type="button" class="secondary-button" id="downloadSummary" disabled><span>Unduh PDF</span></button></div>
 </aside>
 </div>
@@ -256,12 +257,12 @@
 <details class="more-options" id="tuMore"><summary><span><i class="fi fi-rr-list" aria-hidden="true"></i> Angsuran, biaya &amp; syarat lain</span><i class="fi fi-rr-angle-small-down" aria-hidden="true"></i></summary><div class="details-body"><div class="field-grid">
 <div class="field"><label for="tuOtherInstalments">Angsuran lain</label><div class="input-shell"><span class="prefix">Rp</span><input id="tuOtherInstalments" class="topup-money" inputmode="decimal" placeholder="0" aria-describedby="tuOtherInstalmentsHint"></div><p class="field-hint" id="tuOtherInstalmentsHint">Di luar kredit yang dilunasi.</p></div>
 <div class="field"><label for="tuOldOther">Tunggakan / biaya lain</label><div class="input-shell"><span class="prefix">Rp</span><input id="tuOldOther" class="topup-money" inputmode="decimal" placeholder="0"></div></div>
-<div class="field"><label for="tuNewOther">Biaya tambahan</label><div class="input-shell"><span class="prefix">Rp</span><input id="tuNewOther" class="topup-money" inputmode="decimal" placeholder="0"></div></div>
+<div class="field cost-editor" data-cost-editor="top"><div class="cost-heading"><label for="tuNewOther">Biaya tambahan</label><button type="button" class="icon-button cost-add" data-cost-add="top" aria-label="Tambah biaya tambahan" title="Tambah biaya"><span aria-hidden="true">+</span></button></div><div id="topCostList" class="cost-list"><div class="cost-row" data-cost-row><div class="input-shell"><input data-cost-name type="text" maxlength="60" placeholder="Nama biaya" aria-label="Nama biaya tambahan 1"></div><div class="input-shell"><span class="prefix">Rp</span><input id="tuNewOther" data-cost-amount inputmode="decimal" placeholder="0" aria-label="Nominal biaya tambahan 1"></div><button type="button" class="icon-button cost-remove" aria-label="Hapus biaya tambahan 1" title="Hapus biaya"><span aria-hidden="true">×</span></button></div></div><div class="cost-total"><span>Total biaya tambahan</span><strong id="topCostTotal">Rp0,00</strong></div><p class="field-hint">Masuk DSR dan potongan pencairan.</p><p class="field-error" id="tuNewOtherError"></p></div>
 <div class="field tu-pppk-only"><label for="tuEmployment">Status PPPK</label><div class="input-shell"><select id="tuEmployment"><option value="full">Penuh waktu</option><option value="part">Paruh waktu</option></select></div></div><div class="field tu-pppk-only"><label for="tuSlik">Kondisi SLIK</label><div class="input-shell"><select id="tuSlik"><option value="clear">Lancar / tanpa fasilitas</option><option value="review">Bermasalah di lembaga lain</option></select></div></div></div><div class="check-row tu-pppk-only"><input type="checkbox" id="tuCollateral"><label for="tuCollateral">Agunan tambahan tersedia (plafon di atas Rp100 juta)</label></div><div class="check-row tu-pppk-only"><input type="checkbox" id="tuSlikReviewed"><label for="tuSlikReviewed">Persyaratan khusus SLIK telah diperiksa analis</label></div></div></details>
 </div><div class="form-bottom"><div class="rate-inline"><span>Bunga anuitas</span><strong id="tuRatePreview">12,25%<small> / tahun</small></strong></div><button type="submit" class="primary-button">Hitung Top Up <i class="fi fi-rr-arrow-small-right" aria-hidden="true"></i></button></div>
 </form></section>
 <aside class="topup-result" id="topUpResult" aria-label="Hasil Top Up"><section class="payment-card"><div class="payment-top"><span id="tuResultProduct">PPPK · KKS72</span><i class="fi fi-rr-calculator" aria-hidden="true"></i></div><p class="payment-label">Angsuran per bulan</p><div class="payment-value"><span class="currency-label">Rp</span><span id="tuPayment">—</span></div><p class="payment-caption" id="tuPaymentCaption"></p><div class="payment-meta"><div><span>Tenor</span><strong id="tuResultMonths">—</strong></div><div><span id="tuRatioLabel">DSR total</span><strong id="tuDsr">—</strong></div></div></section>
-<section class="breakdown-card" id="tuBreakdown"><div class="section-heading"><h2>Rincian pencairan</h2><span class="section-index">02</span></div><dl class="fee-list"><div><dt>Plafon baru</dt><dd id="tuResultPrincipal">—</dd></div><div><dt>Pokok kredit lama</dt><dd id="tuResultOldPrincipal">—</dd></div><div><dt>Penalti</dt><dd id="tuResultPenalty">—</dd></div><div><dt>Bunga akrual</dt><dd id="tuResultAccrued">—</dd></div><div id="tuOldOtherRow" hidden><dt>Tunggakan / biaya lain</dt><dd id="tuResultOldOther">—</dd></div><div><dt><strong>Total pelunasan lama</strong></dt><dd id="tuOldTotal">—</dd></div><div><dt>Provisi</dt><dd id="tuResultProvision">—</dd></div><div><dt>Administrasi</dt><dd id="tuResultAdmin">—</dd></div><div><dt>Biaya cetak</dt><dd id="tuResultPrint">—</dd></div><div><dt>Asuransi</dt><dd id="tuResultInsurance">—</dd></div><div id="tuNewOtherRow" hidden><dt>Biaya tambahan</dt><dd id="tuResultNewOther">—</dd></div><div><dt>Dana blokir</dt><dd id="tuResultBlock">—</dd></div></dl><div class="net-cash"><div><span id="tuNetLabel">Tambahan dana bersih</span><i class="fi fi-rr-wallet" aria-hidden="true"></i></div><strong id="tuNet">—</strong><p id="tuNetNote" hidden></p></div><div class="salary-remainder"><span>Sisa gaji / bulan</span><strong id="tuRemainingSalary">—</strong></div></section>
+<section class="breakdown-card" id="tuBreakdown"><div class="section-heading"><h2>Rincian pencairan</h2><span class="section-index">02</span></div><dl class="fee-list"><div><dt>Plafon baru</dt><dd id="tuResultPrincipal">—</dd></div><div><dt>Pokok kredit lama</dt><dd id="tuResultOldPrincipal">—</dd></div><div><dt>Penalti</dt><dd id="tuResultPenalty">—</dd></div><div><dt>Bunga akrual</dt><dd id="tuResultAccrued">—</dd></div><div id="tuOldOtherRow" hidden><dt>Tunggakan / biaya lain</dt><dd id="tuResultOldOther">—</dd></div><div><dt><strong>Total pelunasan lama</strong></dt><dd id="tuOldTotal">—</dd></div><div><dt>Provisi</dt><dd id="tuResultProvision">—</dd></div><div><dt>Administrasi</dt><dd id="tuResultAdmin">—</dd></div><div><dt>Biaya cetak</dt><dd id="tuResultPrint">—</dd></div><div><dt>Asuransi</dt><dd id="tuResultInsurance">—</dd></div><div id="tuNewOtherRow" hidden><dt>Biaya tambahan</dt><dd id="tuResultNewOther">—</dd></div><div><dt>Dana blokir</dt><dd id="tuResultBlock">—</dd></div></dl><div class="cost-detail" id="topCostDetails" hidden></div><div class="net-cash"><div><span id="tuNetLabel">Tambahan dana bersih</span><i class="fi fi-rr-wallet" aria-hidden="true"></i></div><strong id="tuNet">—</strong><p id="tuNetNote" hidden></p></div><div class="salary-remainder"><span>Sisa gaji / bulan</span><strong id="tuRemainingSalary">—</strong></div></section>
 <div class="capacity-panel" id="tuCapacity" hidden><div class="capacity-copy"><span class="capacity-status"><i class="fi fi-rr-check-circle" aria-hidden="true"></i><span id="tuCapacityLabel">Dalam batas DSR</span></span><p id="tuCapacityDetail"></p></div></div><p class="topup-warning" id="tuManualNote" hidden>Cek gaji pokok di slip gaji. Pelunasan final dari T24.</p><div class="result-actions" id="tuActions"><button type="button" class="secondary-button" id="tuSchedule" disabled><i class="fi fi-rr-calendar" aria-hidden="true"></i>Jadwal angsuran</button><button type="button" class="secondary-button" id="tuPrint" disabled><i class="fi fi-rr-print" aria-hidden="true"></i>Cetak</button><button type="button" class="secondary-button" id="tuPdf" disabled>Unduh PDF</button></div>
 </aside></div></section>
 <section class="entry-workspace" id="dataEntryPane" aria-label="Data Entry" hidden>
@@ -698,9 +699,9 @@ const KredioMath = (() => {
   const capacity = data => {
     if (data.product === 'pns') {
       const ratio = data.extraIncome ? .95 : .8;
-      return Math.max(0, Math.min(cent(data.salary * ratio), cent(data.salary * .95) - data.existing));
+      return Math.max(0, Math.min(cent(data.salary * ratio), cent(data.salary * .95) - data.existing - data.otherCosts));
     }
-    return Math.max(0, cent(data.salary * .7) - data.existing);
+    return Math.max(0, cent(data.salary * .7) - data.existing - data.otherCosts);
   };
   const schedule = (principal, months, annualRate, start) => {
     const rows = [];
@@ -729,7 +730,7 @@ const KredioMath = (() => {
     const monthlyFactor = payment(1, data.months, annualRate);
     const maxPrincipal = Math.max(0, Math.min(productCap(data), Math.floor(available / monthlyFactor / 100000) * 100000));
     const totalInterest = cent(rows.reduce((sum, row) => sum + row.interest, 0));
-    return {...data, annualRate, rows, instalment, provision, admin, print, block, fees, net: cent(data.principal - fees - block), remainingSalary: cent(data.salary - data.existing - instalment), available, maxPrincipal, totalInterest, totalPayments: cent(data.principal + totalInterest), ratio: instalment / data.salary * 100, totalRatio: (instalment + data.existing) / data.salary * 100, withinCapacity: instalment <= available};
+    return {...data, annualRate, rows, instalment, provision, admin, print, block, fees, net: cent(data.principal - fees - block), remainingSalary: cent(data.salary - data.existing - data.otherCosts - instalment), available, maxPrincipal, totalInterest, totalPayments: cent(data.principal + totalInterest), ratio: instalment / data.salary * 100, totalRatio: (instalment + data.existing + data.otherCosts) / data.salary * 100, withinCapacity: instalment <= available};
   };
   return Object.freeze({parseDate, iso, addMonths, rate, payment, maturityLimit, maxMonths, productCap, capacity, schedule, calculate});
 })();
@@ -836,13 +837,14 @@ const KredioMath = (() => {
     $('remainingSalary').closest('.salary-remainder').classList.remove('negative');
     $('paymentValue').classList.remove('compact');
     $('otherFeeRow').hidden = true;
+    $('newCostDetails').hidden=true;
     $('capacityPanel').hidden = true;
     $('resultNote').hidden = true;
     $('scheduleButton').disabled = true;
     $('printButton').disabled = true;
     $('downloadSummary').disabled = true;
   };
-  const collect = () => ({product:state.product, debtorName:$('debtorName').value.trim().replace(/\s+/g,' '), principal:parseMoney($('principal').value), months:Number($('tenor').value), salary:parseMoney($('salary').value), insurance:parseMoney($('insurance').value), existing:parseMoney($('existing').value,0), otherCosts:parseMoney($('otherCosts').value,0), startDate:$('startDate').value, maturity:$('maturity').value, extraIncome:$('extraIncome').checked, partTime:$('employment').value==='part', slik:$('slik').value, payroll:$('payroll').checked, collateral:$('collateral').checked, slikReviewed:$('slikReviewed').checked, promoProvision:$('promoProvision').checked, promoAdmin:$('promoAdmin').checked, promoPrint:$('promoPrint').checked, promoBlock:$('promoBlock').checked});
+  const collect = () => ({product:state.product, debtorName:$('debtorName').value.trim().replace(/\s+/g,' '), principal:parseMoney($('principal').value), months:Number($('tenor').value), salary:parseMoney($('salary').value), insurance:parseMoney($('insurance').value), existing:parseMoney($('existing').value,0), otherCosts:costTotal('new'), otherCostItems:readCosts('new'), startDate:$('startDate').value, maturity:$('maturity').value, extraIncome:$('extraIncome').checked, partTime:$('employment').value==='part', slik:$('slik').value, payroll:$('payroll').checked, collateral:$('collateral').checked, slikReviewed:$('slikReviewed').checked, promoProvision:$('promoProvision').checked, promoAdmin:$('promoAdmin').checked, promoPrint:$('promoPrint').checked, promoBlock:$('promoBlock').checked});
   const validate = data => {
     const errors = [];
     const add = (id,message) => errors.push(error(id,message));
@@ -894,6 +896,7 @@ const KredioMath = (() => {
     setText('feeInsurance',result.insurance===null?'Belum diisi':money(result.insurance));
     $('feeInsurance').classList.toggle('pending',result.insurance===null);
     $('otherFeeRow').hidden = result.otherCosts===0;
+    renderCostDetails('new',result);
     setText('netLabel',result.insurance===null?'Dana sebelum asuransi':'Dana bersih diterima');
     setText('netNote',result.insurance===null?'Premi belum dikurangkan. Isi untuk hasil lengkap.':waived.length?'Setelah biaya yang masih dikenakan.':'Setelah biaya dan dana blokir.');
     setText('remainingSalary',money(result.remainingSalary));
@@ -906,7 +909,7 @@ const KredioMath = (() => {
     $('capacityPanel').classList.toggle('over',!result.withinCapacity);
     setText('capacityTitle',result.withinCapacity?(result.product==='pppk'?'Dalam batas DSR':'Dalam batas angsuran'):(result.product==='pppk'?'Melebihi batas DSR':'Melebihi batas angsuran'));
     $('capacityStatus').querySelector('i').className='fi '+(result.withinCapacity?'fi-rr-check-circle':'fi-rr-exclamation');
-    const context = result.product==='pns' ? `Batas pengajuan ${result.extraIncome?'95':'80'}% gaji; total bersama angsuran lain maksimal 95%.` : 'Batas DSR 70% gaji bersih. Batas gaji pokok diperiksa analis dari slip gaji.';
+    const context = result.product==='pns' ? `Batas pengajuan ${result.extraIncome?'95':'80'}% gaji; total bersama angsuran lain dan biaya tambahan maksimal 95%.` : 'Batas DSR 70% gaji bersih. Batas gaji pokok diperiksa analis dari slip gaji.';
     setText('capacityDescription',result.withinCapacity?`Batas angsuran berdasarkan rasio ${money(result.available)} per bulan.`:`Angsuran melampaui batas rasio sebesar ${money(result.instalment-result.available)} per bulan.`);
     setText('capacityRatio',percentNumber.format(result.totalRatio)+'%');
     $('capacityBar').style.width=Math.min(100,result.totalRatio)+'%';
@@ -927,6 +930,7 @@ const KredioMath = (() => {
   };
   const submit = showToast => {
     clearErrors();
+    if(!validateCosts('new'))return;
     const data=collect();
     if (!validate(data)) return;
     state.result=KredioMath.calculate(data);
@@ -943,9 +947,69 @@ const KredioMath = (() => {
     const cents=Number(whole.replace(/\./g,''))*100+Number(fraction.padEnd(2,'0'));
     return Number.isSafeInteger(cents) && cents<=99999999999900 ? cents/100 : NaN;
   };
+  const costKey = mode => mode==='new'?'otherCosts':'tuNewOther';
+  const costRows = mode => Array.from($(mode+'CostList').querySelectorAll('[data-cost-row]'));
+  const readCosts = mode => costRows(mode).map((row,index)=>({name:row.querySelector('[data-cost-name]').value.trim() || `Biaya tambahan ${index+1}`,amount:parseTopAmount(row.querySelector('[data-cost-amount]').value,0)})).filter(item=>item.amount!==0);
+  const costTotal = mode => readCosts(mode).reduce((sum,item)=>sum+Math.round(item.amount*100),0)/100;
+  const costsFilled = mode => costRows(mode).some(row=>Array.from(row.querySelectorAll('input')).some(input=>input.value.trim()));
+  const refreshCosts = mode => {
+    costRows(mode).forEach((row,index)=>{
+      const amount=row.querySelector('[data-cost-amount]');amount.id=index===0?costKey(mode):costKey(mode)+'_'+index;
+      amount.setAttribute('aria-label',`Nominal biaya tambahan ${index+1}`);
+      row.querySelector('[data-cost-name]').setAttribute('aria-label',`Nama biaya tambahan ${index+1}`);
+      row.querySelector('.cost-remove').setAttribute('aria-label',`Hapus biaya tambahan ${index+1}`);
+    });
+    const total=costTotal(mode);setText(mode+'CostTotal',Number.isFinite(total)?money(total):'Periksa nominal');
+  };
+  const resetCosts = mode => {
+    const rows=costRows(mode);rows.slice(1).forEach(row=>row.remove());
+    rows[0].querySelectorAll('input').forEach(input=>{input.value='';input.removeAttribute('aria-invalid');});
+    rows[0].closest('.field').classList.remove('has-error');setText(costKey(mode)+'Error','');refreshCosts(mode);
+  };
+  const validateCosts = mode => {
+    for(const row of costRows(mode)){
+      const input=row.querySelector('[data-cost-amount]'),amount=parseTopAmount(input.value,0);
+      if(!Number.isFinite(amount) || amount<0){
+        row.closest('details').open=true;input.setAttribute('aria-invalid','true');input.focus();
+        setText(costKey(mode)+'Error','Periksa nominal biaya tambahan.');toast('Isi nominal biaya tambahan yang valid.','warning');return false;
+      }
+    }
+    if(!Number.isSafeInteger(Math.round(costTotal(mode)*100)) || costTotal(mode)>999999999999){toast('Total biaya tambahan terlalu besar.','warning');return false;}
+    return true;
+  };
+  const costDetailRows = r => (r.otherCostItems || []).filter(item=>item.amount>0);
+  const renderCostDetails = (mode,r) => {
+    const items=costDetailRows(r),box=$(mode+'CostDetails');box.hidden=!items.length;
+    box.innerHTML=items.length?'<span>Rincian biaya tambahan</span><dl>'+items.map(item=>`<div><dt>${escapeHtml(item.name)}</dt><dd>${money(item.amount)}</dd></div>`).join('')+'</dl>':'';
+  };
+  const printCostDetails = r => {
+    const items=costDetailRows(r);if(!items.length)return '';
+    return '<h2 class="print-title">Rincian biaya tambahan</h2><table class="print-fees"><tbody>'+items.map(item=>`<tr><td>${escapeHtml(item.name)}</td><td>${money(item.amount)}</td></tr>`).join('')+`<tr><td><strong>Total biaya tambahan</strong></td><td><strong>${money(r.otherCosts)}</strong></td></tr></tbody></table><p class="print-note">Total biaya tambahan diperhitungkan dalam DSR dan potongan pencairan.</p>`;
+  };
+  const initCosts = () => {
+    for(const mode of ['new','top']){
+      const editor=document.querySelector(`[data-cost-editor="${mode}"]`),list=$(mode+'CostList'),template=costRows(mode)[0].cloneNode(true);
+      const dirty=()=>{if(mode==='new')markDirty();else topResetResult();};
+      editor.querySelector('[data-cost-add]').addEventListener('click',()=>{
+        const row=template.cloneNode(true);list.append(row);refreshCosts(mode);row.querySelector('[data-cost-name]').focus();
+      });
+      list.addEventListener('input',()=>{setText(costKey(mode)+'Error','');refreshCosts(mode);});
+      list.addEventListener('focusout',event=>{
+        if(!event.target.matches('[data-cost-amount]'))return;
+        const value=parseTopAmount(event.target.value);if(Number.isFinite(value))event.target.value=rupiahNumber.format(value);refreshCosts(mode);
+      });
+      list.addEventListener('click',event=>{
+        const button=event.target.closest('.cost-remove');if(!button)return;
+        if(costRows(mode).length===1)resetCosts(mode);else {button.closest('[data-cost-row]').remove();refreshCosts(mode);}
+        dirty();
+      });
+      refreshCosts(mode);
+    }
+  };
   const activeResult = () => !$('topUpPane').hidden ? state.topUpResult : state.result;
   const topResetResult = () => {
     state.topUpResult=null;
+    $('topCostDetails').hidden=true;
     ['tuPayment','tuResultMonths','tuDsr','tuResultPrincipal','tuResultOldPrincipal','tuResultPenalty','tuResultAccrued','tuResultOldOther','tuOldTotal','tuResultProvision','tuResultAdmin','tuResultPrint','tuResultInsurance','tuResultNewOther','tuResultBlock','tuNet','tuRemainingSalary'].forEach(id=>setText(id,'—'));
     setText('tuPaymentCaption','');setText('tuNetLabel','Tambahan dana bersih');setText('tuNetNote','');
     ['tuOldOtherRow','tuNewOtherRow','tuCapacity','tuManualNote','tuNetNote'].forEach(id=>{$(id).hidden=true;});
@@ -975,7 +1039,7 @@ const KredioMath = (() => {
     principal:parseTopAmount($('tuPrincipal').value),months:Number($('tuMonths').value),startDate:$('tuDate').value,maturity:$('tuContract').value,
     salary:parseTopAmount($('tuSalary').value),existing:parseTopAmount($('tuOtherInstalments').value,0),
     oldPrincipal:parseTopAmount($('tuOldPrincipal').value),penalty:parseTopAmount($('tuPenalty').value),accrued:parseTopAmount($('tuAccrued').value),oldOther:parseTopAmount($('tuOldOther').value,0),
-    insurance:parseTopAmount($('tuInsurance').value),otherCosts:parseTopAmount($('tuNewOther').value,0),
+    insurance:parseTopAmount($('tuInsurance').value),otherCosts:costTotal('top'),otherCostItems:readCosts('top'),
     partTime:state.topProduct==='pppk' && $('tuEmployment').value==='part',slik:$('tuSlik').value,payroll:$('tuPayroll').checked,collateral:$('tuCollateral').checked,slikReviewed:$('tuSlikReviewed').checked,
     promoProvision:$('tuPromoProvision').checked,promoAdmin:$('tuPromoAdmin').checked,promoPrint:$('tuPromoPrint').checked,promoBlock:$('tuPromoBlock').checked,extraIncome:state.topProduct==='pns' && $('tuExtraIncome').checked
   });
@@ -1017,6 +1081,7 @@ const KredioMath = (() => {
     setText('tuNetLabel',r.insurance===null?'Dana sebelum asuransi':'Tambahan dana bersih');
     setText('tuNetNote',r.insurance===null?'Premi belum dikurangkan.':'');$('tuNetNote').hidden=r.insurance!==null;
     $('tuOldOtherRow').hidden=!r.oldOther;$('tuNewOtherRow').hidden=!r.otherCosts;
+    renderCostDetails('top',r);
     for(const [id,value] of [['tuResultProvision',r.provision],['tuResultAdmin',r.admin],['tuResultPrint',r.print],['tuResultBlock',r.block]])$(id).parentElement.hidden=value===0;
     $('tuNet').closest('.net-cash').classList.toggle('negative',r.net<0);
     $('tuCapacity').hidden=r.withinCapacity;$('tuCapacity').classList.toggle('over',!r.withinCapacity);
@@ -1029,6 +1094,7 @@ const KredioMath = (() => {
   };
   const topSubmit = () => {
     if($('topUpForm').hidden || (state.topProduct==='pns' && $('tuMethod').value!=='single'))return;
+    if(!validateCosts('top'))return;
     const data=topCollect();if(!topValidate(data))return;
     const result=KredioMath.calculate(data);
     result.oldTotal=Math.round((data.oldPrincipal+data.penalty+data.accrued+data.oldOther)*100)/100;
@@ -1174,6 +1240,25 @@ const KredioMath = (() => {
     doc.setFontSize(8);doc.setTextColor(...pdfMuted);
     doc.text(doc.splitTextToSize(notes,176),17,y,{lineHeightFactor:1.55});
   };
+  const pdfCostDetails = (doc,r) => {
+    const items=costDetailRows(r);if(!items.length)return;
+    let y=68;
+    const page=()=>{doc.addPage();pdfHeader(doc,'Rincian biaya tambahan',r,doc.getNumberOfPages());y=68;};
+    page();
+    for(const item of items){
+      doc.setFont('Poppins','normal');doc.setFontSize(9);
+      const lines=doc.splitTextToSize(item.name,125),height=Math.max(10,lines.length*5+4);
+      if(y+height>262)page();
+      doc.setFont('Poppins','normal');doc.setFontSize(9);doc.setTextColor(...pdfInk);
+      doc.text(lines,17,y,{lineHeightFactor:1.5});pdfText(doc,pdfMoney(item.amount),193,y,{align:'right'});
+      y+=height;pdfRule(doc,y-4);
+    }
+    if(y+24>268)page();
+    doc.setFont('Poppins','bold');doc.setFontSize(10);doc.setTextColor(...pdfInk);
+    pdfText(doc,'Total biaya tambahan',17,y+3);pdfText(doc,pdfMoney(r.otherCosts),193,y+3,{align:'right'});
+    doc.setFont('Poppins','normal');doc.setFontSize(8);doc.setTextColor(...pdfMuted);
+    pdfText(doc,'Diperhitungkan dalam DSR dan potongan pencairan.',17,y+14);
+  };
   const pdfTableHeading = (doc,y) => {
     doc.setFillColor(245,245,245);doc.rect(17,y-5,176,9,'F');
     doc.setFont('Poppins','bold');doc.setFontSize(7.5);doc.setTextColor(...pdfMuted);
@@ -1216,7 +1301,7 @@ const KredioMath = (() => {
     try{
       const doc=new window.jspdf.jsPDF({unit:'mm',format:'a4',compress:true});
       pdfInit(doc);
-      if(includeSchedule)pdfSchedule(doc,r);else pdfSummary(doc,r);
+      if(includeSchedule)pdfSchedule(doc,r);else {pdfSummary(doc,r);pdfCostDetails(doc,r);}
       pdfFooters(doc);
       const type=r.product==='pns'?'PNS-KKS10':'PPPK-KKS72';
       doc.save(`Kredio-${includeSchedule?'Jadwal-Angsuran':'Simulasi'}-${r.topUp?'Top-Up-':''}${type}-${today()}.pdf`);
@@ -1230,6 +1315,7 @@ const KredioMath = (() => {
       const head=`<div class="print-head"><h1>kredio.</h1><span>${productLabel(r.product)} · Top Up</span><img class="print-bank-logo" src="${pdfLogo()}" alt="Bank Jambi"></div><p class="print-debtor">Nama debitur: <strong>${escapeHtml(r.debtorName)}</strong></p>`;
       const rows=[['Plafon kredit baru',r.principal],['Sisa pokok lama',r.oldPrincipal],['Penalti pelunasan',r.penalty],['Bunga akrual',r.accrued],['Tunggakan / biaya lama',r.oldOther],['Total pelunasan lama',r.oldTotal],['Provisi',r.provision],['Administrasi',r.admin],['Biaya cetak',r.print],['Premi asuransi',r.insurance],['Biaya tambahan',r.otherCosts],['Dana blokir',r.block]];
       $('printSheet').innerHTML=head+`<h2 class="print-title">Simulasi Top Up ${r.product==='pns'?'PNS':'PPPK'}</h2><div class="print-grid"><div><span>Tanggal pencairan</span><strong>${dateLabel(r.startDate)}</strong></div><div><span>Jangka waktu baru</span><strong>${r.months} bulan</strong></div><div><span>Gaji bersih</span><strong>${money(r.salary)}</strong></div><div><span>DSR total</span><strong>${percentNumber.format(r.totalRatio)}%</strong></div></div><div class="print-summary"><div><span>Angsuran baru</span><strong>${money(r.instalment)} / bulan</strong></div><div><span>${r.insurance===null?'Dana sebelum asuransi':'Tambahan dana bersih'}</span><strong>${money(r.net)}</strong></div></div><table class="print-fees"><tbody>${rows.map(([label,value])=>`<tr><td>${label}</td><td>${value===null?'Belum diisi':money(value)}</td></tr>`).join('')}</tbody></table><p class="print-note">Pelunasan lama mengikuti angka T24. ${r.product==='pns'?'TMT pensiun':'Batas gaji pokok'} dan ketentuan lainnya diperiksa analis.</p>`;
+      $('printSheet').insertAdjacentHTML('beforeend',printCostDetails(r));
       printingDialog=document.querySelector('dialog[open]');if(printingDialog)closeDialog(printingDialog);window.print();return;
     }
     const fees=[['Plafon pinjaman',money(r.principal)],[r.promoProvision?'Provisi (promo)':'Provisi (0,5%)',money(r.provision)],[r.promoAdmin?'Administrasi (promo)':`Administrasi (${r.months} × Rp30.000)`,money(r.admin)],[r.promoPrint?'Biaya cetak (promo)':'Biaya cetak',money(r.print)],['Premi asuransi',r.insurance===null?'Belum diisi':money(r.insurance)],['Biaya tambahan',money(r.otherCosts)],[r.promoBlock?'Dana blokir (promo)':`Dana blokir (${r.product==='pns'?'½':'1'}× angsuran)`,money(r.block)]];
@@ -1242,12 +1328,13 @@ const KredioMath = (() => {
     } else {
       $('printSheet').innerHTML=head+`<h2 class="print-title">Ringkasan simulasi</h2><div class="print-grid"><div><span>Tanggal pencairan</span><strong>${dateLabel(r.startDate)}</strong></div><div><span>Angsuran terakhir</span><strong>${dateLabel(r.rows[r.rows.length-1].date)}</strong></div><div><span>Plafon & tenor</span><strong>${money(r.principal)} · ${r.months} bulan</strong></div><div><span>Bunga anuitas</span><strong>${percentNumber.format(r.annualRate)}% per tahun</strong></div><div><span>Gaji bersih diperhitungkan</span><strong>${money(r.salary)}</strong></div><div><span>Angsuran lain</span><strong>${money(r.existing)} per bulan</strong></div></div><div class="print-summary"><div><span>Angsuran per bulan</span><strong>${money(r.instalment)}</strong></div><div><span>${r.insurance===null?'Dana sebelum asuransi':'Dana bersih diterima'}</span><strong>${money(r.net)}</strong></div></div><table class="print-fees"><tbody>${fees.map(([name,value])=>`<tr><td>${name}</td><td>${value}</td></tr>`).join('')}</tbody></table><p class="print-status">DSR total ${percentNumber.format(r.totalRatio)}% · ${r.withinCapacity?(r.product==='pppk'?'Dalam batas DSR':'Dalam batas angsuran'):(r.product==='pppk'?'Melebihi batas DSR':'Melebihi batas angsuran')} · Batas angsuran baru ${money(r.available)} per bulan.${r.product==='pppk'?' Gaji pokok diperiksa analis dari slip gaji.':''}</p><p class="print-note">Total bunga ${money(r.totalInterest)}. Total pembayaran angsuran ${money(r.totalPayments)}.${r.net<0?' Biaya dan dana blokir melebihi plafon.':''}</p>`+note;
     }
+    if(!includeSchedule)$('printSheet').insertAdjacentHTML('beforeend',printCostDetails(r));
     printingDialog=document.querySelector('dialog[open]');
     if (printingDialog) closeDialog(printingDialog);
     window.print();
   };
   const resetForm = () => {
-    form.reset();
+    form.reset();resetCosts('new');
     state.product='pns';state.result=null;state.maturity={pns:'',pppk:''};state.hasCalculated=false;state.page=1;
     $('startDate').value=today();
     $('moreOptions').open=false;
@@ -1316,7 +1403,7 @@ const KredioMath = (() => {
   $('tuPrint').addEventListener('click',()=>printResult(false));
   $('tuPdf').addEventListener('click',()=>downloadPdf(false));
   const resetTopForm = () => {
-    topForm.reset();$('tuDate').value=today();$('tuMore').open=false;
+    topForm.reset();resetCosts('top');$('tuDate').value=today();$('tuMore').open=false;
     topForm.querySelectorAll('[aria-invalid]').forEach(el=>el.removeAttribute('aria-invalid'));
     topResetResult();syncTopOptions();setText('liveStatus','Formulir Top Up dikosongkan.');toast('Formulir Top Up sudah dikosongkan.');
   };
@@ -1325,7 +1412,7 @@ const KredioMath = (() => {
     const top=!$('topUpPane').hidden;
     const filled=top
       ? !!state.topUpResult || Array.from(topForm.elements).some(el=>el.type==='checkbox'?el.checked!==el.defaultChecked:el.tagName==='SELECT'?el.selectedIndex!==0:el.id!=='tuDate' && typeof el.value==='string' && el.value.trim()!=='')
-      : !!state.result || ['debtorName','principal','salary','tenor','insurance','maturity','existing','otherCosts'].some(id=>$(id).value) || $('extraIncome').checked || $('payroll').checked || $('collateral').checked || $('slikReviewed').checked || ['promoProvision','promoAdmin','promoPrint','promoBlock'].some(id=>!$(id).checked) || state.product!=='pns';
+      : !!state.result || costsFilled('new') || ['debtorName','principal','salary','tenor','insurance','maturity','existing','otherCosts'].some(id=>$(id).value) || $('extraIncome').checked || $('payroll').checked || $('collateral').checked || $('slikReviewed').checked || ['promoProvision','promoAdmin','promoPrint','promoBlock'].some(id=>!$(id).checked) || state.product!=='pns';
     const performReset=top?resetTopForm:resetForm;
     if (!filled) {performReset();return;}
     if (window.Swal) {const answer=await Swal.fire({title:'Kosongkan simulasi?',text:'Data yang sudah diisi akan dihapus dari formulir.',icon:'question',showCancelButton:true,confirmButtonText:'Ya, kosongkan',cancelButtonText:'Kembali',reverseButtons:true,focusCancel:true,width:400});if(answer.isConfirmed)performReset();}
@@ -1337,6 +1424,7 @@ const KredioMath = (() => {
     dialog.addEventListener('click',event=>{const rect=dialog.getBoundingClientRect();if(event.target===dialog&&(event.clientX<rect.left||event.clientX>rect.right||event.clientY<rect.top||event.clientY>rect.bottom))closeDialog(dialog);});
   });
   window.addEventListener('afterprint',()=>{if(printingDialog && activeResult()){openDialog(printingDialog);printingDialog=null;}});
+  initCosts();
   $('startDate').value=today();
   $('tuDate').value=today();
   topResetResult();
