@@ -273,8 +273,9 @@
 <div class="field"><label for="tuPenalty">Penalti</label><div class="input-shell"><span class="prefix">Rp</span><input id="tuPenalty" class="topup-money" inputmode="decimal" placeholder="191.243,73"></div></div>
 <div class="field"><label for="tuAccrued">Bunga akrual</label><div class="input-shell"><span class="prefix">Rp</span><input id="tuAccrued" class="topup-money" inputmode="decimal" placeholder="165.744,57"></div></div>
 </div></div>
-<div class="topup-group"><div class="topup-group-title"><h3>Biaya baru</h3></div><div class="field-grid">
+<div class="topup-group"><div class="topup-group-title"><h3>Biaya &amp; pengembalian</h3></div><div class="field-grid">
 <div class="field"><label for="tuInsurance">Premi asuransi</label><div class="input-shell"><span class="prefix">Rp</span><input id="tuInsurance" class="topup-money" inputmode="decimal" placeholder="Belum diisi"></div></div>
+<div class="field"><label for="tuRefund">Pengembalian blokir/angsuran</label><div class="input-shell"><span class="prefix">Rp</span><input id="tuRefund" class="topup-money" inputmode="decimal" placeholder="0" aria-describedby="tuRefundHint"></div><p class="field-hint" id="tuRefundHint">Opsional · menambah dana bersih.</p></div>
 </div><div class="promo-option" role="group" aria-labelledby="tuPromoTitle"><div class="promo-title-row"><span id="tuPromoTitle">Bebas biaya</span></div><div class="promo-grid"><label class="promo-choice" for="tuPromoProvision"><input type="checkbox" id="tuPromoProvision" checked><span>Provisi</span></label><label class="promo-choice" for="tuPromoAdmin"><input type="checkbox" id="tuPromoAdmin"><span>Administrasi</span></label><label class="promo-choice" for="tuPromoPrint"><input type="checkbox" id="tuPromoPrint" checked><span>Biaya cetak</span></label><label class="promo-choice" for="tuPromoBlock"><input type="checkbox" id="tuPromoBlock" checked><span>Dana blokir</span></label></div><p class="promo-help">Centang biaya yang dibebaskan.</p></div>
 <details class="more-options" id="tuMore"><summary><span><i class="fi fi-rr-list" aria-hidden="true"></i> Angsuran, biaya &amp; syarat lain</span><i class="fi fi-rr-angle-small-down" aria-hidden="true"></i></summary><div class="details-body"><div class="field-grid">
 <div class="field"><label for="tuOtherInstalments">Angsuran lain</label><div class="input-shell"><span class="prefix">Rp</span><input id="tuOtherInstalments" class="topup-money" inputmode="decimal" placeholder="0" aria-describedby="tuOtherInstalmentsHint"></div><p class="field-hint" id="tuOtherInstalmentsHint">Di luar kredit yang dilunasi.</p></div>
@@ -285,7 +286,7 @@
 <div class="form-bottom"><div class="rate-inline"><span>Bunga anuitas</span><strong id="tuRatePreview">12,25%<small> / tahun</small></strong></div><button type="submit" class="primary-button">Hitung Top Up <i class="fi fi-rr-arrow-small-right" aria-hidden="true"></i></button></div>
 </form></section>
 <aside class="topup-result" id="topUpResult" aria-label="Hasil Top Up"><section class="payment-card"><div class="payment-top"><span id="tuResultProduct">PPPK · KKS72</span><i class="fi fi-rr-calculator" aria-hidden="true"></i></div><p class="payment-label">Angsuran per bulan</p><div class="payment-value"><span class="currency-label">Rp</span><span id="tuPayment">—</span></div><p class="payment-caption" id="tuPaymentCaption"></p><div class="payment-meta"><div><span>Tenor</span><strong id="tuResultMonths">—</strong></div><div><span id="tuRatioLabel">DSR total</span><strong id="tuDsr">—</strong></div></div></section>
-<section class="breakdown-card" id="tuBreakdown"><div class="section-heading"><h2>Rincian pencairan</h2><span class="section-index">02</span></div><dl class="fee-list"><div><dt>Plafon baru</dt><dd id="tuResultPrincipal">—</dd></div><div><dt>Pokok kredit lama</dt><dd id="tuResultOldPrincipal">—</dd></div><div><dt>Penalti</dt><dd id="tuResultPenalty">—</dd></div><div><dt>Bunga akrual</dt><dd id="tuResultAccrued">—</dd></div><div id="tuOldOtherRow" hidden><dt>Tunggakan / biaya lain</dt><dd id="tuResultOldOther">—</dd></div><div><dt><strong>Total pelunasan lama</strong></dt><dd id="tuOldTotal">—</dd></div><div><dt>Provisi</dt><dd id="tuResultProvision">—</dd></div><div><dt>Administrasi</dt><dd id="tuResultAdmin">—</dd></div><div><dt>Biaya cetak</dt><dd id="tuResultPrint">—</dd></div><div><dt>Asuransi</dt><dd id="tuResultInsurance">—</dd></div><div><dt>Dana blokir</dt><dd id="tuResultBlock">—</dd></div></dl><div class="net-cash"><div><span id="tuNetLabel">Tambahan dana bersih</span><i class="fi fi-rr-wallet" aria-hidden="true"></i></div><strong id="tuNet">—</strong><p id="tuNetNote" hidden></p></div><div class="salary-remainder"><span>Sisa gaji / bulan</span><strong id="tuRemainingSalary">—</strong></div><div class="cost-detail" id="topCostDetails" hidden></div></section>
+<section class="breakdown-card" id="tuBreakdown"><div class="section-heading"><h2>Rincian pencairan</h2><span class="section-index">02</span></div><dl class="fee-list"><div><dt>Plafon baru</dt><dd id="tuResultPrincipal">—</dd></div><div><dt>Pokok kredit lama</dt><dd id="tuResultOldPrincipal">—</dd></div><div><dt>Penalti</dt><dd id="tuResultPenalty">—</dd></div><div><dt>Bunga akrual</dt><dd id="tuResultAccrued">—</dd></div><div id="tuOldOtherRow" hidden><dt>Tunggakan / biaya lain</dt><dd id="tuResultOldOther">—</dd></div><div><dt><strong>Total pelunasan lama</strong></dt><dd id="tuOldTotal">—</dd></div><div><dt>Provisi</dt><dd id="tuResultProvision">—</dd></div><div><dt>Administrasi</dt><dd id="tuResultAdmin">—</dd></div><div><dt>Biaya cetak</dt><dd id="tuResultPrint">—</dd></div><div><dt>Asuransi</dt><dd id="tuResultInsurance">—</dd></div><div><dt>Dana blokir</dt><dd id="tuResultBlock">—</dd></div><div id="tuRefundRow" hidden><dt>Pengembalian blokir/angsuran</dt><dd id="tuResultRefund">—</dd></div></dl><div class="net-cash"><div><span id="tuNetLabel">Tambahan dana bersih</span><i class="fi fi-rr-wallet" aria-hidden="true"></i></div><strong id="tuNet">—</strong><p id="tuNetNote" hidden></p></div><div class="salary-remainder"><span>Sisa gaji / bulan</span><strong id="tuRemainingSalary">—</strong></div><div class="cost-detail" id="topCostDetails" hidden></div></section>
 <div class="capacity-panel" id="tuCapacity" hidden><div class="capacity-copy"><span class="capacity-status"><i class="fi fi-rr-check-circle" aria-hidden="true"></i><span id="tuCapacityLabel">Dalam batas DSR</span></span><p id="tuCapacityDetail"></p></div></div><p class="topup-warning" id="tuManualNote" hidden>Cek gaji pokok di slip gaji. Pelunasan final dari T24.</p><div class="result-actions" id="tuActions"><button type="button" class="secondary-button" id="tuSchedule" disabled><i class="fi fi-rr-calendar" aria-hidden="true"></i>Jadwal angsuran</button><button type="button" class="secondary-button" id="tuPrint" disabled><i class="fi fi-rr-print" aria-hidden="true"></i>Cetak</button><button type="button" class="secondary-button" id="tuPdf" disabled>Unduh PDF</button></div>
 </aside></div></section>
 <section class="entry-workspace" id="dataEntryPane" aria-label="Data Entry" hidden>
@@ -1048,9 +1049,9 @@ const KredioMath = (() => {
   const topResetResult = () => {
     state.topUpResult=null;
     $('topCostDetails').hidden=true;
-    ['tuPayment','tuResultMonths','tuDsr','tuResultPrincipal','tuResultOldPrincipal','tuResultPenalty','tuResultAccrued','tuResultOldOther','tuOldTotal','tuResultProvision','tuResultAdmin','tuResultPrint','tuResultInsurance','tuResultBlock','tuNet','tuRemainingSalary'].forEach(id=>setText(id,'—'));
+    ['tuPayment','tuResultMonths','tuDsr','tuResultPrincipal','tuResultOldPrincipal','tuResultPenalty','tuResultAccrued','tuResultOldOther','tuOldTotal','tuResultProvision','tuResultAdmin','tuResultPrint','tuResultInsurance','tuResultBlock','tuResultRefund','tuNet','tuRemainingSalary'].forEach(id=>setText(id,'—'));
     setText('tuPaymentCaption','');setText('tuNetLabel','Tambahan dana bersih');setText('tuNetNote','');
-    ['tuOldOtherRow','tuCapacity','tuManualNote','tuNetNote'].forEach(id=>{$(id).hidden=true;});
+    ['tuOldOtherRow','tuRefundRow','tuCapacity','tuManualNote','tuNetNote'].forEach(id=>{$(id).hidden=true;});
     ['tuResultProvision','tuResultAdmin','tuResultPrint','tuResultBlock'].forEach(id=>{$(id).parentElement.hidden=false;});
     $('tuNet').closest('.net-cash').classList.remove('negative');
     ['tuSchedule','tuPrint','tuPdf'].forEach(id=>{$(id).disabled=true;});
@@ -1076,7 +1077,7 @@ const KredioMath = (() => {
     topUp:true,product:state.topProduct,debtorName:$('tuName').value.trim().replace(/\s+/g,' '),
     principal:parseTopAmount($('tuPrincipal').value),months:Number($('tuMonths').value),startDate:$('tuDate').value,maturity:$('tuContract').value,
     salary:parseTopAmount($('tuSalary').value),existing:parseTopAmount($('tuOtherInstalments').value,0),
-    oldPrincipal:parseTopAmount($('tuOldPrincipal').value),penalty:parseTopAmount($('tuPenalty').value),accrued:parseTopAmount($('tuAccrued').value),oldOther:parseTopAmount($('tuOldOther').value,0),
+    oldPrincipal:parseTopAmount($('tuOldPrincipal').value),penalty:parseTopAmount($('tuPenalty').value),accrued:parseTopAmount($('tuAccrued').value),oldOther:parseTopAmount($('tuOldOther').value,0),refund:parseTopAmount($('tuRefund').value,0),
     insurance:parseTopAmount($('tuInsurance').value),otherCosts:costTotal('top'),otherCostItems:readCosts('top'),
     partTime:state.topProduct==='pppk' && $('tuEmployment').value==='part',slik:$('tuSlik').value,payroll:$('tuPayroll').checked,collateral:$('tuCollateral').checked,slikReviewed:$('tuSlikReviewed').checked,
     promoProvision:$('tuPromoProvision').checked,promoAdmin:$('tuPromoAdmin').checked,promoPrint:$('tuPromoPrint').checked,promoBlock:$('tuPromoBlock').checked,extraIncome:state.topProduct==='pns' && $('tuExtraIncome').checked
@@ -1098,6 +1099,7 @@ const KredioMath = (() => {
     for(const [key,id,label] of [['oldPrincipal','tuOldPrincipal','sisa pokok lama'],['penalty','tuPenalty','penalti T24'],['accrued','tuAccrued','bunga akrual T24']]){
       if(!Number.isFinite(data[key]) || data[key]<0) return fail(id,`Isi ${label}; tulis 0 jika nihil.`);
     }
+    if(!Number.isFinite(data.refund) || data.refund<0) return fail('tuRefund','Isi pengembalian yang valid, atau kosongkan jika tidak ada.');
     for(const [key,id] of [['oldOther','tuOldOther'],['existing','tuOtherInstalments'],['otherCosts','tuNewOther'],['insurance','tuInsurance']]){
       if(data[key]!==null && (!Number.isFinite(data[key]) || data[key]<0)) return fail(id,'Isi nominal rupiah yang valid, atau kosongkan premi jika belum diketahui.');
     }
@@ -1119,6 +1121,8 @@ const KredioMath = (() => {
     setText('tuNetLabel',r.insurance===null?'Dana sebelum asuransi':'Tambahan dana bersih');
     setText('tuNetNote',r.insurance===null?'Premi belum dikurangkan.':'');$('tuNetNote').hidden=r.insurance!==null;
     $('tuOldOtherRow').hidden=!r.oldOther;
+    $('tuRefundRow').hidden=!r.refund;
+    setText('tuResultRefund','+ '+money(r.refund));
     renderCostDetails('top',r);
     for(const [id,value] of [['tuResultProvision',r.provision],['tuResultAdmin',r.admin],['tuResultPrint',r.print],['tuResultBlock',r.block]])$(id).parentElement.hidden=value===0;
     $('tuNet').closest('.net-cash').classList.toggle('negative',r.net<0);
@@ -1136,7 +1140,7 @@ const KredioMath = (() => {
     const data=topCollect();if(!topValidate(data))return;
     const result=KredioMath.calculate(data);
     result.oldTotal=Math.round((data.oldPrincipal+data.penalty+data.accrued+data.oldOther)*100)/100;
-    result.net=Math.round((result.net-result.oldTotal)*100)/100;
+    result.net=(Math.round(result.net*100)-Math.round(result.oldTotal*100)+Math.round(data.refund*100))/100;
     state.topUpResult=result;topRender(result);
     toast(result.net<0?'Dana bersih negatif. Periksa angka pelunasan dan biaya.':!result.withinCapacity?'Top Up dihitung. Angsuran melampaui batas.':result.insurance===null?'Top Up dihitung. Premi asuransi belum diisi.':`Top Up ${result.product==='pns'?'PNS':'PPPK'} berhasil dihitung.`,result.net<0||!result.withinCapacity?'warning':'success');
     if(window.matchMedia('(max-width:730px)').matches) $('tuPayment').closest('.payment-card').scrollIntoView({behavior:window.matchMedia('(prefers-reduced-motion:reduce)').matches?'auto':'smooth',block:'start'});
@@ -1219,7 +1223,7 @@ const KredioMath = (() => {
       doc.setFont('Poppins','bold');doc.setFontSize(18);doc.setTextColor(...pdfInk);pdfText(doc,pdfMoney(r.instalment),24,y+23);
       doc.setFontSize(9);pdfText(doc,`DSR total ${percentNumber.format(r.totalRatio)}%`,185,y+19,{align:'right'});
       y+=43;doc.setFontSize(10);pdfText(doc,'Rincian pencairan',17,y);y+=6;pdfRule(doc,y);y+=8;
-      const rows=[['Plafon kredit baru',r.principal],['Sisa pokok lama',r.oldPrincipal],['Penalti pelunasan',r.penalty],['Bunga akrual',r.accrued],['Tunggakan / biaya lama',r.oldOther],['Total pelunasan lama',r.oldTotal],['Provisi',r.provision],['Administrasi',r.admin],['Biaya cetak',r.print],['Premi asuransi',r.insurance],['Dana blokir',r.block]];
+      const rows=[['Plafon kredit baru',r.principal],['Sisa pokok lama',r.oldPrincipal],['Penalti pelunasan',r.penalty],['Bunga akrual',r.accrued],['Tunggakan / biaya lama',r.oldOther],['Total pelunasan lama',r.oldTotal],['Provisi',r.provision],['Administrasi',r.admin],['Biaya cetak',r.print],['Premi asuransi',r.insurance],['Dana blokir',r.block],...(r.refund>0?[['Pengembalian blokir/angsuran (+)',r.refund]]:[])];
       for(const [label,value] of rows){doc.setFont('Poppins','normal');doc.setFontSize(8.5);doc.setTextColor(...pdfMuted);pdfText(doc,label,17,y);doc.setTextColor(...pdfInk);pdfText(doc,value===null?'Belum diisi':pdfMoney(value),193,y,{align:'right'});y+=7.5;}
       pdfRule(doc,y-2);y+=8;doc.setFont('Poppins','bold');doc.setFontSize(10);pdfText(doc,r.insurance===null?'Dana sebelum asuransi':'Tambahan dana bersih',17,y);pdfText(doc,pdfMoney(r.net),193,y,{align:'right'});
       y+=14;doc.setFont('Poppins','normal');doc.setFontSize(8);doc.setTextColor(...pdfMuted);
@@ -1352,7 +1356,7 @@ const KredioMath = (() => {
     if (!r) return;
     if(r.topUp && !includeSchedule){
       const head=`<div class="print-head"><img class="print-bank-logo" src="${pdfLogo()}" alt="Bank Jambi"></div><p class="print-product">${productLabel(r.product)} · Top Up</p><p class="print-debtor">Nama debitur: <strong>${escapeHtml(r.debtorName)}</strong></p>`;
-      const rows=[['Plafon kredit baru',r.principal],['Sisa pokok lama',r.oldPrincipal],['Penalti pelunasan',r.penalty],['Bunga akrual',r.accrued],['Tunggakan / biaya lama',r.oldOther],['Total pelunasan lama',r.oldTotal],['Provisi',r.provision],['Administrasi',r.admin],['Biaya cetak',r.print],['Premi asuransi',r.insurance],['Dana blokir',r.block]];
+      const rows=[['Plafon kredit baru',r.principal],['Sisa pokok lama',r.oldPrincipal],['Penalti pelunasan',r.penalty],['Bunga akrual',r.accrued],['Tunggakan / biaya lama',r.oldOther],['Total pelunasan lama',r.oldTotal],['Provisi',r.provision],['Administrasi',r.admin],['Biaya cetak',r.print],['Premi asuransi',r.insurance],['Dana blokir',r.block],...(r.refund>0?[['Pengembalian blokir/angsuran (+)',r.refund]]:[])];
       $('printSheet').innerHTML=head+`<h2 class="print-title">Simulasi Top Up ${r.product==='pns'?'PNS':'PPPK'}</h2><div class="print-grid"><div><span>Tanggal pencairan</span><strong>${dateLabel(r.startDate)}</strong></div><div><span>Jangka waktu baru</span><strong>${r.months} bulan</strong></div><div><span>Gaji bersih</span><strong>${money(r.salary)}</strong></div><div><span>DSR total</span><strong>${percentNumber.format(r.totalRatio)}%</strong></div></div><div class="print-summary"><div><span>Angsuran baru</span><strong>${money(r.instalment)} / bulan</strong></div><div><span>${r.insurance===null?'Dana sebelum asuransi':'Tambahan dana bersih'}</span><strong>${money(r.net)}</strong></div></div><table class="print-fees"><tbody>${rows.map(([label,value])=>`<tr><td>${label}</td><td>${value===null?'Belum diisi':money(value)}</td></tr>`).join('')}</tbody></table><p class="print-note">Pelunasan lama mengikuti angka T24. ${r.product==='pns'?'TMT pensiun':'Batas gaji pokok'} dan ketentuan lainnya diperiksa analis.</p>`;
       $('printSheet').insertAdjacentHTML('beforeend',printCostDetails(r));
       printingDialog=document.querySelector('dialog[open]');if(printingDialog)closeDialog(printingDialog);window.print();return;
