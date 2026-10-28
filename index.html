@@ -200,6 +200,7 @@
   .topup-workspace.is-coming-soon .topup-form{height:auto;min-height:420px}
 }
 </style>
+<style>.print-product{font-size:9px;color:#777;margin:0 0 8px}</style>
 </head>
 <body>
 <div class="entry-loader" id="entryLoader" role="status" aria-label="Memuat Kredio"><div class="entry-inner"><div class="entry-mark"><svg viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="18" fill="currentColor"/><path d="M19 16v32M44 17L29 32l15 15" fill="none" stroke="#f6f6f2" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/></svg><span>kredio<b>.</b></span></div><div class="entry-track"><span></span></div></div></div>
@@ -1170,7 +1171,6 @@ const KredioMath = (() => {
   };
   const pdfHeader = (doc, title, result, page) => {
     doc.setFont('Poppins','bold');doc.setFontSize(15);doc.setTextColor(...pdfInk);
-    pdfText(doc,'kredio.',pdfPage.left,23);
     doc.addImage(pdfLogo(),'PNG',156,14,37,8.1,'bank-jambi');
     pdfRule(doc,29);
     doc.setFontSize(17);pdfText(doc,title,pdfPage.left,42);
@@ -1184,7 +1184,6 @@ const KredioMath = (() => {
     for(let page=1;page<=pages;page++){
       doc.setPage(page);pdfRule(doc,279);
       doc.setFont('Poppins','normal');doc.setFontSize(7.5);doc.setTextColor(...pdfMuted);
-      pdfText(doc,'Kredio  |  Simulasi kredit',pdfPage.left,285);
       pdfText(doc,`${page} / ${pages}`,pdfPage.right,285,{align:'right'});
     }
   };
@@ -1192,7 +1191,7 @@ const KredioMath = (() => {
     doc.setFont('Poppins','normal');doc.setFontSize(8);doc.setTextColor(...pdfMuted);
     pdfText(doc,label,x,y);
     doc.setFont('Poppins','bold');doc.setFontSize(10);doc.setTextColor(...pdfInk);
-    pdfText(doc,value,x+width,y+5,{align:'right'});
+    pdfText(doc,value,x,y+7);
   };
   const pdfSummary = (doc, r) => {
     if(r.topUp){
@@ -1317,6 +1316,10 @@ const KredioMath = (() => {
     doc.setFont('Poppins','normal');doc.setFontSize(7.2);doc.setTextColor(...pdfMuted);
     pdfText(doc,'Angsuran terakhir menyesuaikan sisa pokok. Jadwal mengikuti perjanjian kredit.',17,y+13);
   };
+  const pdfFilename = (result,includeSchedule) => {
+    const name=String(result.debtorName || '').normalize('NFKC').replace(/[<>:"/\\|?*\u0000-\u001f\u007f]/g,' ').replace(/\s+/g,' ').trim() || 'debitur';
+    return `${includeSchedule?'jadwal angsuran':'simulasi'}-${name}-${today().slice(0,4)}.pdf`;
+  };
   const downloadPdf = includeSchedule => {
     const r=activeResult();if(!r)return;
     if(!window.jspdf?.jsPDF){toast('Pembuat PDF belum tersedia. Coba muat ulang halaman.','error');return;}
@@ -1325,8 +1328,7 @@ const KredioMath = (() => {
       pdfInit(doc);
       if(includeSchedule)pdfSchedule(doc,r);else {pdfSummary(doc,r);pdfCostDetails(doc,r);}
       pdfFooters(doc);
-      const type=r.product==='pns'?'PNS-KKS10':'PPPK-KKS72';
-      doc.save(`Kredio-${includeSchedule?'Jadwal-Angsuran':'Simulasi'}-${r.topUp?'Top-Up-':''}${type}-${today()}.pdf`);
+      doc.save(pdfFilename(r,includeSchedule));
       toast('PDF berhasil diunduh.');
     }catch(error){console.error('Gagal membuat PDF:',error);toast('PDF gagal dibuat. Coba ulangi.','error');}
   };
@@ -1334,14 +1336,14 @@ const KredioMath = (() => {
     const r=activeResult();
     if (!r) return;
     if(r.topUp && !includeSchedule){
-      const head=`<div class="print-head"><h1>kredio.</h1><span>${productLabel(r.product)} · Top Up</span><img class="print-bank-logo" src="${pdfLogo()}" alt="Bank Jambi"></div><p class="print-debtor">Nama debitur: <strong>${escapeHtml(r.debtorName)}</strong></p>`;
+      const head=`<div class="print-head"><img class="print-bank-logo" src="${pdfLogo()}" alt="Bank Jambi"></div><p class="print-product">${productLabel(r.product)} · Top Up</p><p class="print-debtor">Nama debitur: <strong>${escapeHtml(r.debtorName)}</strong></p>`;
       const rows=[['Plafon kredit baru',r.principal],['Sisa pokok lama',r.oldPrincipal],['Penalti pelunasan',r.penalty],['Bunga akrual',r.accrued],['Tunggakan / biaya lama',r.oldOther],['Total pelunasan lama',r.oldTotal],['Provisi',r.provision],['Administrasi',r.admin],['Biaya cetak',r.print],['Premi asuransi',r.insurance],['Biaya tambahan',r.otherCosts],['Dana blokir',r.block]];
       $('printSheet').innerHTML=head+`<h2 class="print-title">Simulasi Top Up ${r.product==='pns'?'PNS':'PPPK'}</h2><div class="print-grid"><div><span>Tanggal pencairan</span><strong>${dateLabel(r.startDate)}</strong></div><div><span>Jangka waktu baru</span><strong>${r.months} bulan</strong></div><div><span>Gaji bersih</span><strong>${money(r.salary)}</strong></div><div><span>DSR total</span><strong>${percentNumber.format(r.totalRatio)}%</strong></div></div><div class="print-summary"><div><span>Angsuran baru</span><strong>${money(r.instalment)} / bulan</strong></div><div><span>${r.insurance===null?'Dana sebelum asuransi':'Tambahan dana bersih'}</span><strong>${money(r.net)}</strong></div></div><table class="print-fees"><tbody>${rows.map(([label,value])=>`<tr><td>${label}</td><td>${value===null?'Belum diisi':money(value)}</td></tr>`).join('')}</tbody></table><p class="print-note">Pelunasan lama mengikuti angka T24. ${r.product==='pns'?'TMT pensiun':'Batas gaji pokok'} dan ketentuan lainnya diperiksa analis.</p>`;
       $('printSheet').insertAdjacentHTML('beforeend',printCostDetails(r));
       printingDialog=document.querySelector('dialog[open]');if(printingDialog)closeDialog(printingDialog);window.print();return;
     }
     const fees=[['Plafon pinjaman',money(r.principal)],[r.promoProvision?'Provisi (promo)':'Provisi (0,5%)',money(r.provision)],[r.promoAdmin?'Administrasi (promo)':`Administrasi (${r.months} × Rp30.000)`,money(r.admin)],[r.promoPrint?'Biaya cetak (promo)':'Biaya cetak',money(r.print)],['Premi asuransi',r.insurance===null?'Belum diisi':money(r.insurance)],['Biaya tambahan',money(r.otherCosts)],[r.promoBlock?'Dana blokir (promo)':`Dana blokir (${r.product==='pns'?'½':'1'}× angsuran)`,money(r.block)]];
-    const head=`<div class="print-head"><h1>kredio.</h1><span>${productLabel(r.product)} · ${r.topUp?'Top Up':'Simulasi kredit'}</span><img class="print-bank-logo" src="${pdfLogo()}" alt="Bank Jambi"></div><p class="print-debtor">Nama debitur: <strong>${escapeHtml(r.debtorName)}</strong></p>`;
+    const head=`<div class="print-head"><img class="print-bank-logo" src="${pdfLogo()}" alt="Bank Jambi"></div><p class="print-product">${productLabel(r.product)} · ${r.topUp?'Top Up':'Simulasi kredit'}</p><p class="print-debtor">Nama debitur: <strong>${escapeHtml(r.debtorName)}</strong></p>`;
     const waived=[['provisi',r.promoProvision],['administrasi',r.promoAdmin],['cetak',r.promoPrint],['blokir',r.promoBlock]].filter(([,checked])=>checked).map(([label])=>label);
     const note=`<p class="print-note">${waived.length?'Promo bebas '+waived.join(', ')+' (Rp0). ':''}Simulasi anuitas dengan bunga ${percentNumber.format(r.annualRate)}% per tahun sepanjang periode. Bunga bersifat mengambang; perubahan bunga mengubah hasil. Nilai uang ditampilkan dengan dua angka desimal, angsuran terakhir menyesuaikan sisa pokok. Jadwal operasional mengikuti perjanjian kredit. ${r.insurance===null?'Premi asuransi belum diperhitungkan. ':''}Batas umur dan pertanggungan asuransi tetap diperiksa analis.</p>`;
     if (includeSchedule) {
