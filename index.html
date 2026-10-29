@@ -81,20 +81,21 @@
 .promo-choice input:checked{border-color:#373737;background:#373737}
 .promo-choice input:checked:after{content:'';width:7px;height:4px;border-left:1.6px solid #fff;border-bottom:1.6px solid #fff;transform:translateY(-1px) rotate(-45deg)}
 .promo-help{color:#979797;font-size:9px;line-height:1.6;margin:12px 0 0}
-.entry-loader{position:fixed;inset:0;background:#f7f7f7;z-index:20000;display:flex;align-items:center;justify-content:center;transition:opacity .4s ease,visibility .4s ease}
+.entry-loader{position:fixed;inset:0;background:#f7f7f7;z-index:20000;display:flex;align-items:center;justify-content:center;transition:opacity .32s ease,visibility .32s ease}
 .entry-loader.is-finished{opacity:0;visibility:hidden;pointer-events:none}
-.entry-inner{display:flex;flex-direction:column;align-items:center;gap:13px}
-.entry-mark{display:flex;align-items:center;gap:10px;color:#292929}
-.entry-mark svg{width:35px;height:35px}
-.entry-mark span{font-size:28px;letter-spacing:-1.4px;font-weight:600}
-.entry-mark span b{font-weight:600;color:#aaa}
-.entry-track{width:114px;height:2px;overflow:hidden;background:#e6e6e6;border-radius:20px;margin-top:5px}
-.entry-track span{display:block;width:38%;height:100%;background:#494949;border-radius:20px;animation:entry-move 1s ease-in-out infinite alternate}
-@keyframes entry-move{from{transform:translateX(0)}to{transform:translateX(190%)}}
+.entry-inner{padding:1.5em .5em;font-size:clamp(54px,8vw,82px);transform:translateY(-8px)}
+.entry-word{display:flex;align-items:baseline;position:relative;color:#2d2d2d;font-family:Poppins,sans-serif;font-size:inherit;font-weight:600;letter-spacing:-.065em;line-height:1.1;user-select:none}
+.entry-i{position:relative;display:inline-block;width:.205em;flex:none;letter-spacing:0;margin-right:-.025em;color:transparent}
+.entry-i::before{content:"";position:absolute;top:.375em;left:50%;transform:translateX(-50%);width:.105em;height:.485em;background:#2d2d2d;border-radius:.008em}
+.entry-i-target{position:absolute;left:50%;top:.165em;width:.115em;height:.115em;transform:translateX(-50%);pointer-events:none}
+.entry-period{position:relative;display:inline-block;width:.19em;height:1.1em;flex:none;letter-spacing:0;color:transparent}
+.entry-ball{position:absolute;left:.02em;top:.76em;width:.115em;height:.115em;border-radius:50%;background:#2d2d2d;transform-origin:50% 100%;will-change:transform}
+.entry-ball-shadow{position:absolute;left:-.015em;top:.91em;width:.19em;height:.025em;background:#252525;border-radius:50%;opacity:.15;filter:blur(.025em);will-change:transform,opacity}
+@media(prefers-reduced-motion:reduce){.entry-loader{transition:none}.entry-ball,.entry-ball-shadow{will-change:auto}.entry-ball-shadow{display:none}}
 @media(max-width:730px){.promo-option{padding:14px}.promo-choice{padding:10px;min-height:42px;font-size:10px}.payment-value.compact #paymentAmount{font-size:25px}.net-cash>strong{font-size:23px}}
 @media(max-width:370px){.promo-grid{gap:7px}.promo-choice{padding:8px;font-size:9px}.payment-value.compact #paymentAmount{font-size:22px}}
 @media print{.entry-loader{display:none!important}}
-@media(prefers-reduced-motion:reduce){.entry-track span{animation:none}}
+
 .debtor-field{margin-bottom:18px}.salary-remainder{border-top:1px solid var(--line);margin-top:18px;padding-top:16px;display:flex;align-items:baseline;justify-content:space-between;gap:5px 12px;flex-wrap:wrap}.salary-remainder span{font-size:10px;color:#858585}.salary-remainder strong{font-size:14px;font-weight:500;color:#555;font-variant-numeric:tabular-nums}.salary-remainder small{width:100%;font-size:9px;color:#a1a1a1}.salary-remainder.negative strong{color:var(--danger)}.schedule-debtor{margin:7px 0 0;color:#777;font-size:11px}@media(min-width:941px){.salary-remainder span,.schedule-debtor{font-size:12px}.salary-remainder strong{font-size:16px}.salary-remainder small{font-size:10px}}@media print{.print-debtor{font-size:11px;margin:-8px 0 14px;color:#444}.print-debtor strong{font-weight:500}}</style>
 <style>
 #dataEntryPane[hidden]{display:none}
@@ -238,8 +239,71 @@ window.KREDIO_SUPABASE = Object.freeze({
 </script>
 </head>
 <body>
-<div class="entry-loader" id="entryLoader" role="status" aria-label="Memuat Kredio"><div class="entry-inner"><div class="entry-mark"><svg viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="18" fill="currentColor"/><path d="M19 16v32M44 17L29 32l15 15" fill="none" stroke="#f6f6f2" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/></svg><span>kredio<b>.</b></span></div><div class="entry-track"><span></span></div></div></div>
-<script>window.addEventListener('load',()=>{const loader=document.getElementById('entryLoader');if(loader)setTimeout(()=>{loader.classList.add('is-finished');setTimeout(()=>loader.remove(),430);},550);});</script>
+<div class="entry-loader" id="entryLoader" role="status" aria-label="Memuat Kredio"><div class="entry-inner" aria-hidden="true"><div class="entry-word"><span>kred</span><span class="entry-i">i<span class="entry-i-target"></span></span><span>o</span><span class="entry-period">.<span class="entry-ball-shadow"></span><span class="entry-ball"></span></span></div></div></div>
+<script id="kredio-loader-script">
+(() => {
+  const loader=document.getElementById('entryLoader');
+  if(!loader)return;
+  let finished=false,animation=null,shadowAnimation=null,app=null;
+  const finish=()=>{
+    if(finished)return;
+    finished=true;
+    if(app)app.inert=false;
+    loader.classList.add('is-finished');
+    setTimeout(()=>{animation?.cancel();shadowAnimation?.cancel();loader.remove();},340);
+  };
+  const fallback=setTimeout(finish,5000);
+  const start=async()=>{
+    app=document.querySelector('.app-shell');
+    if(finished)return;
+    if(app)app.inert=true;
+    try{
+      if(document.fonts)await Promise.race([document.fonts.ready,new Promise(resolve=>setTimeout(resolve,250))]);
+      await new Promise(resolve=>requestAnimationFrame(resolve));
+      if(finished)return;
+      const ball=loader.querySelector('.entry-ball');
+      const target=loader.querySelector('.entry-i-target');
+      const shadow=loader.querySelector('.entry-ball-shadow');
+      const origin=ball.getBoundingClientRect(),destination=target.getBoundingClientRect();
+      const dx=destination.left-origin.left,dy=destination.top-origin.top;
+      const em=parseFloat(getComputedStyle(loader.querySelector('.entry-word')).fontSize);
+      const pose=(x,y,sx=1,sy=1)=>`translate(${x}px,${y}px) scale(${sx},${sy})`;
+      const resting=pose(dx,dy);
+      if(window.matchMedia('(prefers-reduced-motion: reduce)').matches || !ball.animate){
+        ball.style.transform=resting;shadow.style.opacity='0';
+        await new Promise(resolve=>setTimeout(resolve,180));
+      }else{
+        const rise='cubic-bezier(.18,.65,.3,1)',fall='cubic-bezier(.55,0,.85,.45)';
+        animation=ball.animate([
+          {offset:0,transform:pose(0,0),easing:'ease-in'},
+          {offset:.07,transform:pose(0,0,1.22,.75),easing:rise},
+          {offset:.20,transform:pose(dx*.08,-em*.5,.92,1.08),easing:fall},
+          {offset:.32,transform:pose(dx*.16,0,1.2,.78),easing:rise},
+          {offset:.49,transform:pose(dx*.36,dy-em*.54,.93,1.08),easing:fall},
+          {offset:.63,transform:pose(dx*.55,dy+em*.09,1.22,.76),easing:rise},
+          {offset:.79,transform:pose(dx*.83,dy-em*.48,.95,1.05),easing:fall},
+          {offset:.91,transform:pose(dx,dy,1.2,.78),easing:rise},
+          {offset:.96,transform:pose(dx,dy-em*.055,.97,1.04),easing:'ease-in-out'},
+          {offset:1,transform:resting}
+        ],{duration:1780,delay:100,fill:'forwards'});
+        shadowAnimation=shadow.animate([
+          {offset:0,opacity:.15,transform:'scaleX(1)'},
+          {offset:.20,opacity:.05,transform:`translateX(${dx*.08}px) scaleX(.6)`},
+          {offset:.32,opacity:.14,transform:`translateX(${dx*.16}px) scaleX(1.15)`},
+          {offset:.49,opacity:.025,transform:`translateX(${dx*.36}px) scaleX(.6)`},
+          {offset:.63,opacity:.07,transform:`translateX(${dx*.55}px) scaleX(.85)`},
+          {offset:.79,opacity:.02,transform:`translateX(${dx*.83}px) scaleX(.55)`},
+          {offset:1,opacity:0,transform:`translateX(${dx}px) scaleX(.6)`}
+        ],{duration:1780,delay:100,fill:'forwards'});
+        await animation.finished;
+        await new Promise(resolve=>setTimeout(resolve,180));
+      }
+    }catch{}
+    finally{clearTimeout(fallback);finish();}
+  };
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',start,{once:true});else void start();
+})();
+</script>
 <div class="app-shell">
 <header class="topbar">
 <a class="brand" href="#" aria-label="Kredio, beranda"><svg viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="18" fill="currentColor"/><path d="M19 16v32M44 17L29 32l15 15" fill="none" stroke="#f6f6f2" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/></svg><span>kredio<span class="brand-dot">.</span></span></a>
