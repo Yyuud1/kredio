@@ -219,6 +219,7 @@
 .history-table th:nth-child(1){width:38%}.history-table th:nth-child(2){width:30%;text-align:right}.history-table th:nth-child(3){width:32%}
 .history-table td{font-size:13px;padding:15px 17px;border-top:1px solid var(--line);vertical-align:middle;overflow-wrap:anywhere;line-height:1.6}
 .history-table td:nth-child(2){text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
+.history-type{display:block;margin-top:3px;font-size:10px;font-weight:400;line-height:1.4;color:#929292;letter-spacing:.01em}
 .history-table time{display:block;font-size:12px;white-space:nowrap;font-variant-numeric:tabular-nums}
 .history-table time span{display:block;color:#8b8b8b;font-size:11px}
 .history-state{padding:50px 20px;text-align:center;font-size:13px;color:#929292;border:1px solid var(--line);border-radius:12px;margin:0}
@@ -400,10 +401,10 @@ window.KREDIO_SUPABASE = Object.freeze({
 <footer><span>Kredio by Ydagrh</span></footer>
 </div>
 <dialog id="historyDialog" class="history-dialog" aria-labelledby="historyTitle" aria-describedby="historySubtitle">
-<div class="dialog-head"><div><h2 id="historyTitle">History</h2><p class="history-subtitle" id="historySubtitle">Unduhan Data Entry</p></div><div class="history-head-actions"><button type="button" class="icon-button" id="historyRefresh" aria-label="Muat ulang History" title="Muat ulang"><i class="fi fi-rr-refresh" aria-hidden="true"></i></button><button type="button" class="icon-button close-dialog" aria-label="Tutup History"><i class="fi fi-rr-cross" aria-hidden="true"></i></button></div></div>
+<div class="dialog-head"><div><h2 id="historyTitle">History</h2><p class="history-subtitle" id="historySubtitle">Simulasi &amp; Data Entry</p></div><div class="history-head-actions"><button type="button" class="icon-button" id="historyRefresh" aria-label="Muat ulang History" title="Muat ulang"><i class="fi fi-rr-refresh" aria-hidden="true"></i></button><button type="button" class="icon-button close-dialog" aria-label="Tutup History"><i class="fi fi-rr-cross" aria-hidden="true"></i></button></div></div>
 <div class="history-content"><div class="history-notice" id="historyPending" hidden><span id="historyPendingText"></span><button type="button" id="historyRetry">Coba lagi</button></div>
 <p class="history-state" id="historyState" role="status">Memuat History…</p>
-<div class="history-table-wrap" id="historyTableWrap" hidden><table class="history-table" aria-label="Riwayat unduhan Data Entry"><thead><tr><th scope="col">Nama</th><th scope="col">Plafon</th><th scope="col">Waktu unduh · WIB</th></tr></thead><tbody id="historyBody"></tbody></table></div>
+<div class="history-table-wrap" id="historyTableWrap" hidden><table class="history-table" aria-label="Riwayat simulasi dan Data Entry"><thead><tr><th scope="col">Nama debitur</th><th scope="col">Plafon</th><th scope="col">Waktu · WIB</th></tr></thead><tbody id="historyBody"></tbody></table></div>
 <div class="history-footer"><span class="history-count" id="historyCount" aria-live="polite"></span><div class="history-pages"><button type="button" class="icon-button" id="historyPrev" aria-label="Halaman sebelumnya" disabled><i class="fi fi-rr-arrow-small-left" aria-hidden="true"></i></button><span class="history-page-number" id="historyPage">1</span><button type="button" class="icon-button" id="historyNext" aria-label="Halaman berikutnya" disabled><i class="fi fi-rr-arrow-small-right" aria-hidden="true"></i></button></div></div>
 </div></dialog>
 <dialog id="rulesDialog" class="rules-dialog" aria-labelledby="rulesTitle"><div class="dialog-head"><div><p class="eyebrow">KREDIO</p><h2 id="rulesTitle">Dasar perhitungan.</h2></div><button type="button" class="icon-button close-dialog" aria-label="Tutup ketentuan"><i class="fi fi-rr-cross" aria-hidden="true"></i></button></div><div class="dialog-content"><p class="dialog-intro">Kredit baru dan Top Up PPPK memakai angsuran anuitas. Pilih kategori sesuai status pegawai.</p><div class="rule-block"><h3>PNS aktif · KKS10</h3><ul><li>Tenor maksimal 300 bulan, dengan angsuran terakhir sebelum TMT pensiun. Kredit yang melewati pensiun menggunakan ketentuan KKS31 dan belum dihitung di sini.</li><li>Angsuran pengajuan maksimal 80% dari gaji bersih yang diperhitungkan, atau 95% dengan penghasilan tambahan terverifikasi. Total angsuran dari gaji yang sama di Bank Jambi maksimal 95%.</li><li>Penghasilan tambahan menaikkan batas rasio; nominalnya tidak ditambahkan ke gaji dasar perhitungan.</li></ul></div><div class="rule-block"><h3>PPPK · KKS72</h3><ul><li>Gaji PPPK telah diterima melalui Bank Jambi. Kredit berakhir paling lambat satu bulan sebelum kontrak berakhir; perpanjangan kontrak belum dapat diasumsikan.</li><li>Total angsuran dari gaji yang sama maksimal 70% gaji bersih. Batas gaji pokok diperiksa analis dari slip gaji karena form hanya meminta gaji bersih. TPP, TPG/sertifikasi, tunjangan jabatan dan eselon tidak masuk gaji yang diperhitungkan.</li><li>SLIK lancar: plafon maksimal Rp150 juta. Di atas Rp100 juta wajib agunan tambahan aset tetap.</li><li>SLIK bermasalah di lembaga lain: maksimal Rp100 juta dengan pemenuhan seluruh persyaratan khusus oleh analis.</li><li>PPPK paruh waktu: maksimal Rp10 juta dan 12 bulan, tetap mengikuti batas kontrak serta ketentuan SLIK lancar.</li></ul></div><div class="rule-block"><h3>Bunga & biaya</h3><dl class="rule-fees"><div><dt>Anuitas sampai 240 bulan</dt><dd>12,25% / tahun</dd></div><div><dt>PNS mulai 241 bulan</dt><dd>12,50% / tahun</dd></div><div><dt>Provisi</dt><dd>0,5% dari plafon</dd></div><div><dt>Administrasi</dt><dd>Rp30.000 × bulan</dd></div><div><dt>Cetak</dt><dd>Rp250.000</dd></div><div><dt>Blokir PNS / PPPK</dt><dd>½× / 1× angsuran</dd></div></dl><p>Premi asuransi dan biaya tambahan diisi manual. Kolom asuransi kosong menghasilkan dana sebelum asuransi; isi 0 hanya jika tidak dibebankan. Dana blokir ditahan di rekening dan mengurangi dana yang dapat digunakan.</p><p>Pembebasan biaya promo dapat dipilih per komponen pada Detail tambahan: provisi, administrasi, cetak, dan dana blokir. Komponen yang dicentang bernilai Rp0; komponen lainnya tetap dihitung. Angsuran, premi asuransi dan biaya tambahan tetap mengikuti perhitungan.</p></div><div class="rule-block"><h3>Catatan simulasi</h3><p>Suku bunga bersifat mengambang. Jadwal memakai bunga yang sama sepanjang simulasi; perubahan bunga akan mengubah hasil. Angsuran, bunga dan pokok dihitung sampai dua angka desimal rupiah, sedangkan angsuran terakhir menyesuaikan sisa pokok.</p><p>Tanggal angsuran mengikuti tanggal pencairan pada bulan berikutnya; jika tanggal tersebut tidak ada, dipakai hari terakhir bulan itu. Jadwal operasional mengikuti perjanjian kredit. Batas umur dan pertanggungan asuransi tetap diperiksa analis.</p><p>Angsuran lain diisi untuk fasilitas di Bank Jambi yang tetap berjalan dan bersumber dari gaji yang sama. Gaji bersih diisi sebelum pengurangan angsuran tersebut agar tidak dihitung dua kali. Menu Top Up PPPK menggunakan angka pelunasan T24 pada tanggal pencairan. Top Up PNS masih dalam pengembangan.</p></div><div class="source-note"><strong>Acuan</strong><span>SK 92/2018 · IN.011.09/KP.DIR/2025 · IN.012.09/KP.DIR/2025 · SK.099.09/KP.DIR/2025.</span><span>Biaya dan blokir PNS mengikuti catatan analis, 20 Oktober 2026.</span></div></div><div class="dialog-bottom"><button type="button" class="primary-button close-dialog">Mengerti<i class="fi fi-rr-check" aria-hidden="true"></i></button></div></dialog>
@@ -1088,6 +1089,7 @@ const KredioMath = (() => {
     state.result=KredioMath.calculate(data);
     state.hasCalculated=true;
     renderResult(state.result);
+    if(showToast)void window.KredioHistory.recordCalculation({name:data.debtorName,principal:data.principal,activityType:'baru'});
     if (showToast && window.matchMedia('(max-width:730px)').matches) document.querySelector('.payment-card').scrollIntoView({behavior:window.matchMedia('(prefers-reduced-motion:reduce)').matches?'auto':'smooth',block:'start'});
     if (showToast) toast(state.result.net<0?'Periksa biaya: dana pencairan bernilai negatif.':!state.result.withinCapacity?'Simulasi dihitung. Angsuran melewati batas.':state.result.insurance===null?'Simulasi dihitung. Premi asuransi belum diisi.':'Simulasi berhasil dihitung.',state.result.net<0||!state.result.withinCapacity?'warning':'success');
   };
@@ -1248,6 +1250,7 @@ const KredioMath = (() => {
     result.oldTotal=Math.round((data.oldPrincipal+data.penalty+data.accrued+data.oldOther)*100)/100;
     result.net=(Math.round(result.net*100)-Math.round(result.oldTotal*100)+Math.round(data.refund*100))/100;
     state.topUpResult=result;topRender(result);
+    void window.KredioHistory.recordCalculation({name:data.debtorName,principal:data.principal,activityType:'top_up'});
     toast(result.net<0?'Dana bersih negatif. Periksa angka pelunasan dan biaya.':!result.withinCapacity?'Top Up dihitung. Angsuran melampaui batas.':result.insurance===null?'Top Up dihitung. Premi asuransi belum diisi.':`Top Up ${result.product==='pns'?'PNS':'PPPK'} berhasil dihitung.`,result.net<0||!result.withinCapacity?'warning':'success');
     if(window.matchMedia('(max-width:730px)').matches) $('tuPayment').closest('.payment-card').scrollIntoView({behavior:window.matchMedia('(prefers-reduced-motion:reduce)').matches?'auto':'smooth',block:'start'});
   };
@@ -1562,15 +1565,16 @@ const KredioMath = (() => {
     topResetResult();syncTopOptions();setText('liveStatus','Formulir Top Up dikosongkan.');toast('Formulir Top Up sudah dikosongkan.');
   };
   $('resetButton').addEventListener('click',async()=>{
-    if(!$('dataEntryPane').hidden)return;
+    const entry=!$('dataEntryPane').hidden;
+    if(entry && window.KredioDataEntry.isBusy()){toast('Tunggu proses unduh selesai.','info');return;}
     const top=!$('topUpPane').hidden;
-    const filled=top
+    const filled=entry?window.KredioDataEntry.hasValues():top
       ? !!state.topUpResult || Array.from(topForm.elements).some(el=>el.type==='checkbox'?el.checked!==el.defaultChecked:el.tagName==='SELECT'?el.selectedIndex!==0:el.id!=='tuDate' && typeof el.value==='string' && el.value.trim()!=='')
       : !!state.result || costsFilled('new') || ['debtorName','principal','salary','tenor','insurance','maturity','existing','otherCosts'].some(id=>$(id).value) || $('extraIncome').checked || $('payroll').checked || $('collateral').checked || $('slikReviewed').checked || ['promoProvision','promoAdmin','promoPrint','promoBlock'].some(id=>!$(id).checked) || state.product!=='pns';
-    const performReset=top?resetTopForm:resetForm;
+    const performReset=entry?window.KredioDataEntry.reset:top?resetTopForm:resetForm;
     if (!filled) {performReset();return;}
-    if (window.Swal) {const answer=await Swal.fire({title:'Kosongkan simulasi?',text:'Data yang sudah diisi akan dihapus dari formulir.',icon:'question',showCancelButton:true,confirmButtonText:'Ya, kosongkan',cancelButtonText:'Kembali',reverseButtons:true,focusCancel:true,width:400});if(answer.isConfirmed)performReset();}
-    else if(window.confirm('Kosongkan seluruh data simulasi?'))performReset();
+    if (window.Swal) {const answer=await Swal.fire({title:entry?'Kosongkan Data Entry?':'Kosongkan simulasi?',text:'Data yang sudah diisi akan dihapus dari formulir.',icon:'question',showCancelButton:true,confirmButtonText:'Ya, kosongkan',cancelButtonText:'Kembali',reverseButtons:true,focusCancel:true,width:400});if(answer.isConfirmed)performReset();}
+    else if(window.confirm(entry?'Kosongkan seluruh isian Data Entry?':'Kosongkan seluruh data simulasi?'))performReset();
   });
   document.querySelectorAll('.close-dialog').forEach(button=>button.addEventListener('click',()=>closeDialog(button.closest('dialog'))));
   document.querySelectorAll('dialog').forEach(dialog=>{
@@ -1708,10 +1712,27 @@ const KredioMath = (() => {
     const tenor = Number(value('tenor'));
     $('entry-tenor-note').textContent = months !== null && tenor > 0 && tenor > months - 1 ? 'Tenor di atas hasil kalkulator; periksa ketentuan.' : '';
   };
-  input('analysisDate').value = new Intl.DateTimeFormat('en-CA', {timeZone:'Asia/Jakarta',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());
-  input('disbursementDate').value = input('analysisDate').value;
-  input('ageLimit').value = '60';
-  input('annualRate').value = '12,25';
+  let entryDefaults={};
+  const applyEntryDefaults=()=>{
+    input('analysisDate').value=new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Jakarta',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());
+    input('disbursementDate').value=input('analysisDate').value;
+    input('ageLimit').value='60';
+    input('annualRate').value='12,25';
+    entryDefaults=Object.fromEntries(all.map(([key])=>[key,input(key).value]));
+  };
+  const resetEntry=()=>{
+    form.reset();applyEntryDefaults();
+    form.querySelectorAll('[aria-invalid]').forEach(field=>field.removeAttribute('aria-invalid'));
+    root.querySelectorAll('details.entry-group').forEach((group,index)=>{group.open=index===0;});
+    root.scrollTop=0;form.scrollTop=0;showCalculator();
+    notice('Formulir Data Entry sudah dikosongkan.');
+  };
+  window.KredioDataEntry=Object.freeze({
+    reset:resetEntry,
+    hasValues:()=>all.some(([key])=>input(key).value!==(entryDefaults[key] || '')),
+    isBusy:()=>$('downloadEntry').disabled
+  });
+  applyEntryDefaults();
   form.addEventListener('paste', event => {
     const field=event.target,key=field.id.replace(/^entry-/, '');
     if(byKey[key]?.[3]!=='money' || field.disabled || field.readOnly)return;
@@ -1781,7 +1802,7 @@ const KredioMath = (() => {
       const snapshot=Object.fromEntries(all.map(([key])=>[key,value(key)]));
       const exportValue=key=>snapshot[key] || '';
       const exportDate=key=>/^\d{4}-\d{2}-\d{2}$/.test(exportValue(key))?new Date(`${exportValue(key)}T00:00:00Z`):null;
-      const historyEntry={name:exportValue('fullName'),principal:parseAmount(exportValue('principal'))};
+      const historyEntry={name:exportValue('fullName'),principal:parseAmount(exportValue('principal')),activityType:'data_entry'};
       if (!window.JSZip) throw new Error('Pembuat Excel belum tersedia. Muat ulang halaman.');
       button.disabled = true;
       button.textContent = 'Menyiapkan Excel…';
@@ -1874,6 +1895,7 @@ const KredioMath = (() => {
   const dialog=$('historyDialog');
   const pageSize=10;
   const pending=new Map();
+  const activityLabels=Object.freeze({baru:'Baru',top_up:'Top Up',data_entry:'Data Entry'});
   const money=new Intl.NumberFormat('id-ID',{style:'currency',currency:'IDR',minimumFractionDigits:2,maximumFractionDigits:2});
   const dayFormat=new Intl.DateTimeFormat('id-ID',{timeZone:'Asia/Jakarta',day:'2-digit',month:'short',year:'numeric'});
   const timeFormat=new Intl.DateTimeFormat('id-ID',{timeZone:'Asia/Jakarta',hour:'2-digit',minute:'2-digit',second:'2-digit',hourCycle:'h23'});
@@ -1895,7 +1917,7 @@ const KredioMath = (() => {
   };
   const updatePending=()=>{
     $('historyPending').hidden=pending.size===0;
-    $('historyPendingText').textContent=`${pending.size} unduhan belum tersimpan. Coba lagi sebelum menutup halaman.`;
+    $('historyPendingText').textContent=`${pending.size} aktivitas belum tersimpan. Coba lagi sebelum menutup halaman.`;
     $('historyRetry').disabled=state.retrying || !connection();
     $('historyRetry').textContent=state.retrying?'Menyimpan…':'Coba lagi';
   };
@@ -1924,6 +1946,9 @@ const KredioMath = (() => {
     for(const item of rows){
       const row=document.createElement('tr');
       const name=document.createElement('td');name.textContent=item.debtor_name;
+      if(Object.hasOwn(activityLabels,item.activity_type)){
+        const type=document.createElement('small');type.className='history-type';type.textContent=activityLabels[item.activity_type];name.append(type);
+      }
       const principal=document.createElement('td');principal.textContent=money.format(Number(item.principal));
       const timestamp=document.createElement('td'),time=document.createElement('time'),clock=document.createElement('span');
       const date=new Date(item.downloaded_at);
@@ -1934,7 +1959,7 @@ const KredioMath = (() => {
     }
     $('historyTableWrap').hidden=rows.length===0;
     $('historyState').hidden=rows.length>0;
-    $('historyState').textContent='Belum ada unduhan.';
+    $('historyState').textContent='Belum ada aktivitas.';
   };
   const load=async(page=1,quiet=false)=>{
     state.controller?.abort();
@@ -1949,7 +1974,7 @@ const KredioMath = (() => {
     if(!quiet){$('historyState').hidden=false;$('historyState').textContent='Memuat History…';$('historyTableWrap').hidden=true;}
     const controller=new AbortController();state.controller=controller;
     try{
-      const query=new URLSearchParams({select:'id,debtor_name,principal,downloaded_at',order:'downloaded_at.desc,id.desc',limit:String(pageSize),offset:String((page-1)*pageSize)});
+      const query=new URLSearchParams({select:'id,debtor_name,principal,downloaded_at,activity_type',order:'downloaded_at.desc,id.desc',limit:String(pageSize),offset:String((page-1)*pageSize)});
       const result=await request(query,{headers:{Prefer:'count=exact'}},controller);
       if(version!==state.version)return;
       if(!Array.isArray(result.data))throw new Error('history-response-invalid');
@@ -1977,10 +2002,11 @@ const KredioMath = (() => {
     await request(new URLSearchParams({on_conflict:'id'}),{method:'POST',headers:{'Content-Type':'application/json',Prefer:'resolution=ignore-duplicates,return=minimal'},body:JSON.stringify(entry)});
     pending.delete(entry.id);updatePending();
   };
-  const record=async({name,principal,downloadedAt})=>{
+  const record=async({name,principal,downloadedAt,occurredAt,activityType})=>{
+    const timestamp=occurredAt ?? downloadedAt;
     const normalized=String(name || '').trim().replace(/\s+/g,' ');
-    if(!normalized || normalized.length>150 || !Number.isFinite(principal) || principal<=0 || principal>999999999999 || !Number.isFinite(Date.parse(downloadedAt)))return 'failed';
-    const entry={id:makeId(),debtor_name:normalized,principal:Math.round(principal*100)/100,downloaded_at:new Date(downloadedAt).toISOString()};
+    if(!Object.hasOwn(activityLabels,activityType) || !normalized || normalized.length>150 || !Number.isFinite(principal) || principal<=0 || principal>999999999999 || !Number.isFinite(Date.parse(timestamp)))return 'failed';
+    const entry={id:makeId(),debtor_name:normalized,principal:Math.round(principal*100)/100,downloaded_at:new Date(timestamp).toISOString(),activity_type:activityType};
     pending.set(entry.id,entry);updatePending();
     if(!connection())return 'unconfigured';
     try{
@@ -1988,6 +2014,18 @@ const KredioMath = (() => {
       if(dialog.open)void load(1);
       return 'saved';
     }catch{return 'failed';}
+  };
+  const recordCalculation=async({name,principal,activityType})=>{
+    const occurredAt=new Date().toISOString();
+    try{
+      const status=await record({name,principal,occurredAt,activityType});
+      if(status==='unconfigured')notify('Hasil dihitung. History belum diaktifkan.','info');
+      else if(status!=='saved')notify('Hasil dihitung. History belum tersimpan; coba lagi melalui History.','warning');
+      return status;
+    }catch{
+      notify('Hasil dihitung. History belum tersimpan.','warning');
+      return 'failed';
+    }
   };
   $('historyButton').addEventListener('click',()=>{
     dialog.showModal();document.body.classList.add('dialog-open');void load(1);
@@ -2007,7 +2045,7 @@ const KredioMath = (() => {
     }catch{notify('History belum tersimpan. Coba lagi saat koneksi tersedia.','warning');}
     finally{state.retrying=false;updatePending();}
   });
-  window.KredioHistory=Object.freeze({record});
+  window.KredioHistory=Object.freeze({record,recordCalculation});
 })();
 </script>
 <script type="text/plain" id="asset-licenses">JSZip 3.10.1 — MIT License (https://github.com/Stuk/jszip)
