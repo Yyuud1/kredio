@@ -120,19 +120,14 @@
 .entry-field input[aria-invalid="true"]{border-color:var(--danger)}
 .entry-field input::placeholder{color:#aaa}
 .entry-field.wide{grid-column:span 2}
-.entry-calculator{grid-column:1/-1;display:flex;gap:20px;align-items:center;justify-content:space-between;border:1px solid #eaeaea;border-radius:12px;padding:16px 19px;background:#fafafa}
-.entry-calculator span{font-size:11px;color:#777;display:block}
-.entry-calculator strong{font-size:21px;letter-spacing:-.04em;font-weight:600}
-.entry-calculator small{font-size:10px;color:#999;display:block;margin-top:3px}
-.entry-calculator .entry-minus{font-size:13px;color:#777;margin-left:14px}
 .entry-actions{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-top:24px;flex-wrap:wrap}
 .entry-actions .entry-action-right{display:flex;gap:9px;align-items:center;flex-wrap:wrap}
 .entry-actions .secondary-button{min-height:43px}
 .entry-actions .primary-button{min-height:43px}
 .entry-footnote{font-size:10px;line-height:1.6;color:#939393;margin:17px 0 0}
 @media(max-width:940px){.entry-fields{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media(max-width:730px){.entry-workspace{padding:24px 19px}.entry-header{align-items:flex-start;flex-direction:column;gap:11px}.entry-header h2{font-size:22px}.entry-fields{padding-left:0;gap:14px 10px}.entry-field.wide{grid-column:1/-1}.entry-field input,.entry-field select{font-size:12px}.entry-calculator{align-items:flex-start;flex-direction:column;gap:7px}.entry-actions{align-items:stretch;flex-direction:column}.entry-actions .entry-action-right{width:100%}.entry-actions .entry-action-right>*{flex:1}.credit-menu-button{min-width:88px;padding:8px 12px}}
-@media(max-width:420px){.entry-fields{grid-template-columns:1fr}.entry-calculator{grid-column:1}.credit-menu-button{font-size:10px;min-width:0;padding:8px 10px}}
+@media(max-width:730px){.entry-workspace{padding:24px 19px}.entry-header{align-items:flex-start;flex-direction:column;gap:11px}.entry-header h2{font-size:22px}.entry-fields{padding-left:0;gap:14px 10px}.entry-field.wide{grid-column:1/-1}.entry-field input,.entry-field select{font-size:12px}.entry-actions{align-items:stretch;flex-direction:column}.entry-actions .entry-action-right{width:100%}.entry-actions .entry-action-right>*{flex:1}.credit-menu-button{min-width:88px;padding:8px 12px}}
+@media(max-width:420px){.entry-fields{grid-template-columns:1fr}.credit-menu-button{font-size:10px;min-width:0;padding:8px 10px}}
 </style>
 <style>
 #topUpPane[hidden],#topUpPns[hidden],#topUpForm[hidden],#topUpResult[hidden],#tuBreakdown[hidden],#tuActions[hidden],#tuManualNote[hidden],#tuCapacity[hidden]{display:none}
@@ -238,6 +233,74 @@ window.KREDIO_SUPABASE = Object.freeze({
   publishableKey: 'sb_publishable_YzL1B8w7DCdR6-m7oT61eA_MStXLNGV'
 });
 </script>
+<style id="kredio-calculators-style">
+.credit-menu{max-width:100%;flex-wrap:wrap}
+.credit-menu-button{white-space:nowrap}
+.calculator-pane{background:var(--white);border:1px solid var(--line);border-radius:var(--radius);padding:30px 34px 25px}
+.calculator-pane[hidden]{display:none}
+.calculator-heading{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:28px;gap:16px}
+.calculator-heading h2{font-size:26px;font-weight:600;letter-spacing:-.04em;margin:0;line-height:1.35}
+.calculator-heading p{font-size:13px;color:var(--muted);margin:5px 0 0}
+.calculator-heading>span{font-size:11px;color:#999;padding-top:5px}
+.work-sheet{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.work-cell{text-align:center;min-width:0;padding:18px 13px 14px;background:#fcfcfc}
+.work-cell+.work-cell{border-left:1px solid var(--line)}
+.work-cell label{display:block;font-size:13px;font-weight:400;margin-bottom:14px;color:#555}
+.work-cell input{width:100%;min-width:0;height:48px;padding:8px 6px;border:1px solid #dedede;border-radius:8px;background:#fff;text-align:center;font:500 21px Poppins,sans-serif;color:#292929;appearance:textfield;-moz-appearance:textfield}
+.work-cell input::-webkit-inner-spin-button,.work-cell input::-webkit-outer-spin-button{-webkit-appearance:none;margin:0}
+.work-cell small{display:block;font-size:10px;line-height:1.5;color:#888;margin-top:10px}
+.work-results{margin-top:25px}
+.work-results>div{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:18px 4px;border-bottom:1px solid var(--line)}
+.work-results>div:last-child{border-bottom:0}
+.work-results>div>span{font-size:14px;color:#656565}
+.work-results p{display:flex;align-items:baseline;gap:9px;margin:0;white-space:nowrap}
+.work-results strong{font-weight:600;font-size:29px;letter-spacing:-.04em;line-height:1.4}
+.work-results p span{font-size:12px;color:#888}
+.calculator-message{font-size:12px;color:var(--danger);line-height:1.6;min-height:0;margin:0}
+.calculator-message:not(:empty){margin-top:12px;margin-bottom:15px}
+.calculator-pane input[aria-invalid="true"]{border-color:var(--danger)}
+.calculator-pane input:focus-visible,.calculator-pane select:focus-visible{outline:2px solid #777;outline-offset:2px}
+#insuranceCalculatorPane .insurance-fields input:focus,
+#insuranceCalculatorPane .insurance-fields input:focus-visible,
+#insuranceCalculatorPane .insurance-fields select:focus,
+#insuranceCalculatorPane .insurance-fields select:focus-visible {
+ outline:none!important;
+ box-shadow:none!important;
+}
+#insuranceCalculatorPane .insurance-fields .input-shell:focus-within {
+ border-color:#bcbcbc;
+ box-shadow:0 0 0 3px rgba(35,35,35,.06);
+}
+#insuranceCalculatorPane input[type="number"]::-webkit-inner-spin-button,
+#insuranceCalculatorPane input[type="number"]::-webkit-outer-spin-button {
+ -webkit-appearance:none;
+ margin:0;
+}
+#insuranceCalculatorPane input[type="number"]{-moz-appearance:textfield;appearance:textfield;}
+.insurance-layout{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:35px}
+#insuranceCalculatorForm .product-switch{margin-bottom:23px}
+.insurance-fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px 16px}
+.insurance-principal{grid-column:1/-1}
+.insurance-fields label{font-size:13px}
+.insurance-fields .input-shell{height:49px;min-width:0}
+.insurance-fields input,.insurance-fields select{font-size:15px;min-width:0;width:100%}
+.insurance-fields select{height:100%;border:0;background:transparent;color:var(--ink);font-family:inherit;padding:0 10px;outline:none}
+.insurance-fields .input-prefix,.insurance-fields .input-suffix{font-size:12px}
+.calculator-hint{display:block;font-size:10px;line-height:1.5;color:#8b8b8b;margin-top:7px}
+#insuranceCalculatorForm>.primary-button{width:100%;margin-top:24px;min-height:47px}
+.insurance-result{border-radius:13px;background:#f6f6f6;padding:27px 26px;display:flex;flex-direction:column;justify-content:center;min-width:0}
+.insurance-result-label{margin:0 0 9px;color:#767676;font-size:12px}
+#insPremium{display:block;font-size:clamp(22px,2.7vw,31px);letter-spacing:-.045em;font-weight:600;line-height:1.5;overflow-wrap:anywhere}
+.insurance-formula{font-size:11px;line-height:1.7;color:#888;margin:5px 0 0;min-height:19px}
+.insurance-breakdown{padding-top:16px;margin:17px 0 24px;border-top:1px solid #e2e2e2}
+.insurance-breakdown>div{display:flex;justify-content:space-between;gap:15px;font-size:12px;line-height:1.7;margin:6px 0}
+.insurance-breakdown dt{color:#777}
+.insurance-breakdown dd{margin:0;text-align:right;font-weight:500}
+.insurance-result>.secondary-button{align-self:flex-start;min-height:38px;background:#fff}
+.insurance-result>small{font-size:10px;color:#919191;line-height:1.5;margin-top:12px}
+.calculator-source{font-size:10px;line-height:1.7;color:#999;margin:24px 0 0}
+@media(max-width:730px){.credit-menu{display:flex;width:100%;gap:3px}.credit-menu-button{flex:1 1 auto;min-width:0;padding:9px 12px;font-size:11px}.calculator-pane{padding:24px 19px}.calculator-heading h2{font-size:23px}.work-sheet{grid-template-columns:repeat(2,minmax(0,1fr))}.work-cell+.work-cell{border-left:0}.work-cell:nth-child(even){border-left:1px solid var(--line)}.work-cell:nth-child(n+3){border-top:1px solid var(--line)}.work-cell:nth-child(3){grid-column:1/-1}.work-cell:nth-child(4){border-left:0}.work-cell:nth-child(5){border-left:1px solid var(--line)}.work-cell:nth-child(3) input{max-width:145px}.work-results>div>span{font-size:12px}.work-results strong{font-size:25px}.insurance-layout{grid-template-columns:1fr;gap:25px}.insurance-result{padding:23px}.insurance-fields{gap:16px 12px}.insurance-fields label{font-size:12px}#insPremium{font-size:28px}}
+</style>
 </head>
 <body>
 <div class="entry-loader" id="entryLoader" role="status" aria-label="Memuat Kredio"><div class="entry-inner" aria-hidden="true"><div class="entry-word"><span>kred</span><span class="entry-i">i<span class="entry-i-target"></span></span><span>o</span><span class="entry-period">.<span class="entry-ball-shadow"></span><span class="entry-ball"></span></span></div></div></div>
@@ -312,7 +375,7 @@ window.KREDIO_SUPABASE = Object.freeze({
 </header>
 <main>
 <div class="page-heading"><div><p class="eyebrow">KREDIT MULTIGUNA</p><h1>Simulasi kredit<span>.</span></h1><p class="intro"></p></div><div class="heading-note"></div></div>
-<div class="credit-menu" role="group" aria-label="Menu kredit"><button type="button" class="credit-menu-button is-active" id="newCreditButton" aria-pressed="true" aria-controls="newCreditPane">Baru</button><button type="button" class="credit-menu-button" id="topUpButton" aria-pressed="false" aria-controls="topUpPane">Top Up</button><button type="button" class="credit-menu-button" id="dataEntryButton" aria-pressed="false" aria-controls="dataEntryPane">Data Entry</button></div>
+<div class="credit-menu" role="group" aria-label="Menu kredit"><button type="button" class="credit-menu-button is-active" id="newCreditButton" aria-pressed="true" aria-controls="newCreditPane">Baru</button><button type="button" class="credit-menu-button" id="topUpButton" aria-pressed="false" aria-controls="topUpPane">Top Up</button><button type="button" class="credit-menu-button" id="dataEntryButton" aria-pressed="false" aria-controls="dataEntryPane">Data Entry</button><button type="button" class="credit-menu-button" id="workCalculatorButton" aria-pressed="false" aria-controls="workCalculatorPane">Kal. Masa Kerja</button><button type="button" class="credit-menu-button" id="insuranceCalculatorButton" aria-pressed="false" aria-controls="insuranceCalculatorPane">Kal. Asuransi</button></div>
 <div id="newCreditPane">
 <div class="workspace">
 <section class="form-card" aria-labelledby="formTitle">
@@ -390,12 +453,47 @@ window.KREDIO_SUPABASE = Object.freeze({
 <div class="capacity-panel" id="tuCapacity" hidden><div class="capacity-copy"><span class="capacity-status"><i class="fi fi-rr-check-circle" aria-hidden="true"></i><span id="tuCapacityLabel">Dalam batas DSR</span></span><p id="tuCapacityDetail"></p></div></div><p class="topup-warning" id="tuManualNote" hidden>Cek gaji pokok di slip gaji. Pelunasan final dari T24.</p><div class="result-actions" id="tuActions"><button type="button" class="secondary-button" id="tuSchedule" disabled><i class="fi fi-rr-calendar" aria-hidden="true"></i>Jadwal angsuran</button><button type="button" class="secondary-button" id="tuPrint" disabled><i class="fi fi-rr-print" aria-hidden="true"></i>Cetak</button><button type="button" class="secondary-button" id="tuPdf" disabled>Unduh PDF</button></div>
 </aside></div></section>
 <section class="entry-workspace" id="dataEntryPane" aria-label="Data Entry" hidden>
-<div class="entry-header"><div><p class="eyebrow"></p><h2>Data Entry.</h2><p>Isi data debitur, periksa kalkulator, lalu unduh lembar kerja analis.</p></div></div>
+<div class="entry-header"><div><p class="eyebrow"></p><h2>Data Entry.</h2><p>Isi data debitur, lalu unduh lembar kerja analis.</p></div></div>
 <form id="dataEntryForm" autocomplete="off" novalidate>
 <div id="dataEntryGroups"></div>
 <div class="entry-actions"><span class="entry-document">PNS · KKS10</span><div class="entry-action-right"><button type="submit" class="primary-button" id="downloadEntry">Unduh Excel <i class="fi fi-rr-arrow-small-right" aria-hidden="true"></i></button></div></div>
 <p class="entry-footnote"></p>
 </form>
+</section>
+<section id="workCalculatorPane" class="calculator-pane" aria-labelledby="workCalculatorTitle" hidden>
+<div class="calculator-heading"><h2 id="workCalculatorTitle">Masa kerja.</h2><span>01</span></div>
+<form id="workCalculatorForm" autocomplete="off" novalidate>
+<div class="work-sheet">
+<div class="work-cell"><label for="wkBirthYear">Tahun lahir</label><input id="wkBirthYear" type="number" inputmode="numeric" min="1900" max="9999" step="1" placeholder="2001" required aria-describedby="workCalcMessage"></div>
+<div class="work-cell"><label for="wkBirthMonth">Bulan lahir</label><input id="wkBirthMonth" type="number" inputmode="numeric" min="1" max="12" step="1" placeholder="6" required aria-describedby="workCalcMessage"></div>
+<div class="work-cell"><label for="wkAgeLimit">Batas usia kerja</label><input id="wkAgeLimit" type="number" inputmode="numeric" min="1" max="120" step="1" value="58" required aria-describedby="workAgeHint workCalcMessage"><small id="workAgeHint">58 PNS biasa · 60 guru</small></div>
+<div class="work-cell"><label for="wkStartYear">Tahun pencairan</label><input id="wkStartYear" type="number" inputmode="numeric" min="1900" max="9999" step="1" required aria-describedby="workCalcMessage"></div>
+<div class="work-cell"><label for="wkStartMonth">Bulan pencairan</label><input id="wkStartMonth" type="number" inputmode="numeric" min="1" max="12" step="1" required aria-describedby="workCalcMessage"></div>
+</div>
+<div class="work-results" aria-live="polite" aria-atomic="true"><div><span>Sisa masa kerja</span><p><strong id="wkRemaining">—</strong><span>bulan</span></p></div><div><span>Sisa dikurangi 1 bulan</span><p><strong id="wkAvailable">—</strong><span>bulan</span></p></div></div>
+<p class="calculator-message" id="workCalcMessage" role="status"></p>
+</form>
+</section>
+<section id="insuranceCalculatorPane" class="calculator-pane" aria-labelledby="insuranceCalculatorTitle" hidden>
+<div class="calculator-heading"><div><h2 id="insuranceCalculatorTitle">Asuransi.</h2><p>Eka Lloyd</p></div><span>02</span></div>
+<div class="insurance-layout">
+<form id="insuranceCalculatorForm" autocomplete="off" novalidate>
+<div class="product-switch" role="group" aria-label="Jenis debitur asuransi"><button type="button" class="product-button selected" data-insurance-product="pns" aria-pressed="true">PNS</button><button type="button" class="product-button" data-insurance-product="pppk" aria-pressed="false">PPPK</button></div>
+<div class="insurance-fields">
+<div class="field insurance-principal"><label for="insPrincipal">Plafon</label><div class="input-shell"><span class="prefix input-prefix">Rp</span><input id="insPrincipal" type="text" inputmode="decimal" placeholder="100.000.000" required aria-describedby="insuranceCalcMessage"></div></div>
+<div class="field"><label for="insTenor">Jangka waktu</label><div class="input-shell"><input id="insTenor" type="number" inputmode="numeric" min="1" step="1" placeholder="36" required aria-describedby="insuranceTenorHint insuranceCalcMessage"><span class="suffix input-suffix">bulan</span></div><small id="insuranceTenorHint" class="calculator-hint">Tarif tersedia sampai 240 bulan.</small></div>
+<div class="field" id="insuranceStatusField"><label for="insStatus">Kategori PNS</label><div class="input-shell"><select id="insStatus"><option value="aktif">Aktif</option><option value="pra_pensiun">Pra pensiun</option><option value="pensiun">Pensiun</option></select></div></div>
+</div>
+<p class="calculator-message" id="insuranceCalcMessage" role="status"></p>
+<button type="submit" class="primary-button">Hitung premi <i class="fi fi-rr-arrow-small-right" aria-hidden="true"></i></button>
+</form>
+<aside class="insurance-result" aria-label="Hasil premi asuransi">
+<div aria-live="polite" aria-atomic="true"><p class="insurance-result-label">Premi asuransi</p><strong id="insPremium">—</strong><p id="insCalculation" class="insurance-formula"></p><dl class="insurance-breakdown"><div><dt>Masa pertanggungan</dt><dd id="insYears">—</dd></div><div><dt id="insRateLabel">Tarif</dt><dd id="insRate">—</dd></div></dl></div>
+<button type="button" id="copyInsurancePremium" class="secondary-button" disabled><i class="fi fi-rr-copy" aria-hidden="true"></i>Salin nominal</button>
+<small>Salin premi ke simulasi bila diperlukan.</small>
+</aside>
+</div>
+<p class="calculator-source">Acuan: tabel dan rumus Excel analis. Tenor dibulatkan ke atas per tahun.</p>
 </section>
 </main>
 <footer><span>Kredio by Ydagrh</span></footer>
@@ -1510,20 +1608,16 @@ const KredioMath = (() => {
     document.querySelectorAll('#creditForm [data-product]').forEach(item=>{const selected=item===button;item.classList.toggle('selected',selected);item.setAttribute('aria-pressed',String(selected));});
     clearErrors();markDirty();syncOptions();
   }));
+  const creditModes=[['new','newCreditButton','newCreditPane'],['topup','topUpButton','topUpPane'],['entry','dataEntryButton','dataEntryPane'],['work','workCalculatorButton','workCalculatorPane'],['insurance','insuranceCalculatorButton','insuranceCalculatorPane']];
   const setCreditMode = mode => {
-    const isNew = mode === 'new';
-    $('newCreditPane').hidden = !isNew;
-    $('topUpPane').hidden = mode !== 'topup';
-    $('dataEntryPane').hidden = mode !== 'entry';
-    for(const [id,active] of [['newCreditButton',isNew],['topUpButton',mode==='topup'],['dataEntryButton',mode==='entry']]){
-      const button=$(id);
-      button.classList.toggle('is-active',active);
-      button.setAttribute('aria-pressed',String(active));
+    for(const [key,buttonId,paneId] of creditModes){
+      const active=key===mode;
+      $(paneId).hidden=!active;
+      $(buttonId).classList.toggle('is-active',active);
+      $(buttonId).setAttribute('aria-pressed',String(active));
     }
   };
-  $('newCreditButton').addEventListener('click',()=>setCreditMode('new'));
-  $('topUpButton').addEventListener('click',()=>setCreditMode('topup'));
-  $('dataEntryButton').addEventListener('click',()=>setCreditMode('entry'));
+  for(const [mode,buttonId] of creditModes)$(buttonId).addEventListener('click',()=>setCreditMode(mode));
   $('rulesButton').addEventListener('click',()=>openDialog($('rulesDialog')));
   $('scheduleButton').addEventListener('click',showSchedule);
   $('printButton').addEventListener('click',()=>printResult(false));
@@ -1565,6 +1659,14 @@ const KredioMath = (() => {
     topResetResult();syncTopOptions();setText('liveStatus','Formulir Top Up dikosongkan.');toast('Formulir Top Up sudah dikosongkan.');
   };
   $('resetButton').addEventListener('click',async()=>{
+    const calculator=window.KredioCalculators?.active();
+    if(calculator){
+      const reset=()=>window.KredioCalculators.reset(calculator);
+      if(!window.KredioCalculators.hasValues(calculator)){reset();return;}
+      if(window.Swal){const answer=await Swal.fire({title:'Kosongkan kalkulator?',text:'Isian kalkulator ini akan dikosongkan.',icon:'question',showCancelButton:true,confirmButtonText:'Ya, kosongkan',cancelButtonText:'Kembali',reverseButtons:true,focusCancel:true,width:400});if(answer.isConfirmed)reset();}
+      else if(window.confirm('Kosongkan isian kalkulator ini?'))reset();
+      return;
+    }
     const entry=!$('dataEntryPane').hidden;
     if(entry && window.KredioDataEntry.isBusy()){toast('Tunggu proses unduh selesai.','info');return;}
     const top=!$('topUpPane').hidden;
@@ -1662,7 +1764,7 @@ const KredioMath = (() => {
       ['emergencyRelation', 'Hubungan kontak darurat', 'D35'],
       ['emergencyAddress', 'Alamat kontak darurat', 'D36', 'text', false, null, true],
     ]},
-    {title: 'Kredit & kalkulator', fields: [
+    {title: 'Kredit', fields: [
       ['principal', 'Plafon', 'D47', 'money', true],
       ['tenor', 'Tenor (bulan)', 'C49', 'number', true],
       ['annualRate', 'Bunga tahunan (%)', 'D48', 'decimal', true],
@@ -1674,7 +1776,7 @@ const KredioMath = (() => {
       ['printFee', 'Biaya cetak', 'D63', 'money'],
       ['adminFee', 'Administrasi', 'D64', 'money'],
       ['blockedFunds', 'Dana blokir', 'E80', 'money'],
-      ['ageLimit', 'Usia acuan kalkulator (tahun)', 'T70', 'number', true],
+      ['ageLimit', 'Batas usia kerja (tahun)', 'T70', 'number', true],
     ]},
     {title: 'Analisis & petugas', fields: [
       ['analysisDate', 'Tanggal analisis', 'D39', 'date', true],
@@ -1696,22 +1798,13 @@ const KredioMath = (() => {
     const type = kind === 'money' || kind === 'decimal' || kind === 'number' ? 'text' : kind;
     const input = kind === 'select' ? `<select id="${id}"><option value="">Pilih</option>${options.map(option => `<option value="${escapeText(option)}">${escapeText(option)}</option>`).join('')}</select>` : `<input id="${id}" type="${type}" ${required ? 'required' : ''} ${kind === 'money' || kind === 'number' || kind === 'decimal' ? 'inputmode="decimal"' : ''} ${kind === 'money' ? 'placeholder="Opsional bila belum diketahui"' : ''} maxlength="150">`;
     return `<div class="entry-field ${wide ? 'wide' : ''}"><label for="${id}">${escapeText(label)}${required ? ' <small>•</small>' : ''}</label>${input}</div>`;
-  }).join('')}${index === 3 ? '<div class="entry-calculator"><div><span>Sisa sampai usia acuan</span><strong id="entry-months">—</strong><small>Perhitungan menggunakan tanggal lahir dan tanggal analisis.</small></div><div><span>Sisa dikurangi satu bulan</span><strong id="entry-months-minus">—</strong><small id="entry-tenor-note"></small></div></div>' : ''}</div></details>`).join('');
+  }).join('')}</div></details>`).join('');
 
   const input = key => $(`entry-${key}`);
   const value = key => input(key).value.trim();
   const parseAmount = KredioMoney.parse;
   const date = key => /^\d{4}-\d{2}-\d{2}$/.test(value(key)) ? new Date(`${value(key)}T00:00:00Z`) : null;
   const dateSerial = day => Math.round((day.getTime() - Date.UTC(1899, 11, 30)) / 86400000);
-  const showCalculator = () => {
-    const born = date('birthDate'), asOf = date('analysisDate'), years = Number(value('ageLimit'));
-    let months = null;
-    if (born && asOf && Number.isInteger(years) && years > 0 && years < 120 && born <= asOf) months = years * 12 - ((asOf.getUTCFullYear() - born.getUTCFullYear()) * 12 + asOf.getUTCMonth() - born.getUTCMonth());
-    $('entry-months').textContent = months === null ? '—' : `${months} bulan`;
-    $('entry-months-minus').textContent = months === null ? '—' : `${months - 1} bulan`;
-    const tenor = Number(value('tenor'));
-    $('entry-tenor-note').textContent = months !== null && tenor > 0 && tenor > months - 1 ? 'Tenor di atas hasil kalkulator; periksa ketentuan.' : '';
-  };
   let entryDefaults={};
   const applyEntryDefaults=()=>{
     input('analysisDate').value=new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Jakarta',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());
@@ -1724,7 +1817,7 @@ const KredioMath = (() => {
     form.reset();applyEntryDefaults();
     form.querySelectorAll('[aria-invalid]').forEach(field=>field.removeAttribute('aria-invalid'));
     root.querySelectorAll('details.entry-group').forEach((group,index)=>{group.open=index===0;});
-    root.scrollTop=0;form.scrollTop=0;showCalculator();
+    root.scrollTop=0;form.scrollTop=0;
     notice('Formulir Data Entry sudah dikosongkan.');
   };
   window.KredioDataEntry=Object.freeze({
@@ -1738,8 +1831,7 @@ const KredioMath = (() => {
     if(byKey[key]?.[3]!=='money' || field.disabled || field.readOnly)return;
     if(KredioMoney.paste(event,field)===false)notice('Nominal tidak valid. Gunakan format 7,705,000.00 atau 7.705.000,00.','warning');
   });
-  form.addEventListener('input', event => {event.target.removeAttribute('aria-invalid');showCalculator();});
-  form.addEventListener('change', showCalculator);
+  form.addEventListener('input', event => {event.target.removeAttribute('aria-invalid');});
   form.addEventListener('focusout', event => {
     const key = event.target.id.replace(/^entry-/, '');
     if (byKey[key]?.[3] === 'money' && event.target.value.trim()) {
@@ -1747,7 +1839,7 @@ const KredioMath = (() => {
       if (Number.isFinite(number)) event.target.value = moneyFormat.format(number);
     }
   });
-  showCalculator();
+  
 
   const setCell = (doc, address, data, kind='text') => {
     const cells = [...doc.getElementsByTagNameNS(MAIN, 'c')];
@@ -2494,6 +2586,179 @@ Dual licenced under the MIT license or GPLv3. See https://raw.github.com/Stuk/js
 
 JSZip uses the library pako released under the MIT license :
 https://github.com/nodeca/pako/blob/main/LICENSE
+</script>
+<script id="kredio-calculators-script">
+(() => {
+  'use strict';
+  const $=id=>document.getElementById(id);
+  const rates=Object.freeze({
+    aktif:Object.freeze([2.56,4.98,7.02,8.87,10.62,13.85,15.53,18.99,20.45,22.63,24.36,27.75,30.97,31.9,33.58,43.9,47.65,49.08,51.37,53.76]),
+    pra_pensiun:Object.freeze([5.14,9.45,15.83,19.39,24.9,27.01,29.85,32.11,35.1,38.21,41.05,44.38,46.08,48.23,50.49,52.6,56.05,58.43,60.92,62.88]),
+    pensiun:Object.freeze([5.5,11,16.5,22,27.5,33,38.5,44,49.5,55,60.5,66,71.5,77,82.5])
+  });
+  const amountFormat=new Intl.NumberFormat('id-ID',{minimumFractionDigits:2,maximumFractionDigits:2});
+  const numberFormat=new Intl.NumberFormat('id-ID',{maximumFractionDigits:2});
+  const note=(title,icon='success')=>{
+    if(window.Swal)Swal.fire({toast:true,position:'top-end',icon,title,showConfirmButton:false,timer:2600,timerProgressBar:true});
+    else $('liveStatus').textContent=title;
+  };
+  const workIds=['wkBirthYear','wkBirthMonth','wkAgeLimit','wkStartYear','wkStartMonth'];
+  const workForm=$('workCalculatorForm'),insuranceForm=$('insuranceCalculatorForm');
+  let workDefaults={},insuranceProduct='pns',premium=null;
+  const clearInvalid=form=>form.querySelectorAll('[aria-invalid]').forEach(field=>field.removeAttribute('aria-invalid'));
+  const calculateWork=({birthYear,birthMonth,ageLimit,startYear,startMonth})=>{
+    const remaining=ageLimit*12-((startYear-birthYear)*12+startMonth-birthMonth);
+    return {remaining,available:remaining-1};
+  };
+  const calculatePremium=({principal,months,product,status})=>{
+    if(!Number.isFinite(principal)||principal<=0||!Number.isSafeInteger(Math.round(principal*100)))throw new Error('Isi plafon yang valid dan lebih dari 0.');
+    if(!Number.isSafeInteger(months)||months<1)throw new Error('Isi jangka waktu dalam bulan penuh, minimal 1 bulan.');
+    const years=Math.ceil(months/12);
+    if(product!=='pns'&&product!=='pppk')throw new Error('Pilih jenis debitur.');
+    const table=Object.hasOwn(rates,status)?rates[status]:null;
+    if(product==='pns'&&!table)throw new Error('Pilih kategori PNS.');
+    if(product==='pns'&&years>table.length)throw new Error(`Tarif kategori ini hanya tersedia sampai ${table.length*12} bulan di Excel analis.`);
+    const rate=product==='pppk'?5.5*years:table[years-1];
+    const cents=Math.round(principal*100);
+    const rateHundredths=BigInt(Math.round(rate*100));
+    const premiumCents=(BigInt(cents)*rateHundredths+50000n)/100000n;
+    if(premiumCents>BigInt(Number.MAX_SAFE_INTEGER))throw new Error('Nominal premi terlalu besar. Periksa plafon dan tenor.');
+    return {years,rate,premium:Number(premiumCents)/100};
+  };
+  const renderWork=(requireComplete=false)=>{
+    clearInvalid(workForm);
+    $('workCalcMessage').textContent='';
+    $('wkRemaining').textContent='—';$('wkAvailable').textContent='—';
+    let error=null;
+    for(const id of workIds){
+      const input=$(id),raw=input.value.trim(),value=Number(raw);
+      if(raw===''&&!input.validity.badInput){if(requireComplete&&!error)error={input,message:'Lengkapi semua isian masa kerja.'};continue;}
+      if(input.validity.badInput||!Number.isInteger(value)||value<Number(input.min)||value>Number(input.max)){
+        if(!error)error={input,message:`Periksa ${workForm.querySelector(`label[for="${id}"]`).textContent.toLowerCase()}. Isi bilangan bulat ${input.min}–${input.max}.`};
+      }
+    }
+    if(error){error.input.setAttribute('aria-invalid','true');$('workCalcMessage').textContent=error.message;if(requireComplete)error.input.focus();return;}
+    if(workIds.some(id=>$(id).value.trim()===''))return;
+    const [birthYear,birthMonth,ageLimit,startYear,startMonth]=workIds.map(id=>Number($(id).value));
+    if(birthYear*12+birthMonth>startYear*12+startMonth){$('wkBirthYear').setAttribute('aria-invalid','true');$('workCalcMessage').textContent='Bulan lahir tidak boleh setelah bulan pencairan.';return;}
+    const result=calculateWork({birthYear,birthMonth,ageLimit,startYear,startMonth});
+    $('wkRemaining').textContent=numberFormat.format(result.remaining);
+    $('wkAvailable').textContent=numberFormat.format(result.available);
+    if(result.available<1)$('workCalcMessage').textContent='Tidak ada sisa bulan yang dapat digunakan setelah pengurangan 1 bulan.';
+  };
+  const resetWork=()=>{
+    workForm.reset();
+    const nowParts=new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Jakarta',year:'numeric',month:'numeric'}).formatToParts(new Date());
+    $('wkStartYear').value=nowParts.find(p=>p.type==='year').value;
+    $('wkStartMonth').value=Number(nowParts.find(p=>p.type==='month').value);
+    workDefaults=Object.fromEntries(workIds.map(id=>[id,$(id).value]));
+    renderWork();
+  };
+  const clearInsurance=()=>{
+    premium=null;
+    for(const id of ['insPremium','insYears','insRate'])$(id).textContent='—';
+    $('insCalculation').textContent='';$('insuranceCalcMessage').textContent='';
+    $('insRateLabel').textContent=insuranceProduct==='pppk'?'Tarif per tahun':'Tarif';
+    $('copyInsurancePremium').disabled=true;
+    clearInvalid(insuranceForm);
+  };
+  const syncInsurance=()=>{
+    $('insuranceStatusField').hidden=insuranceProduct!=='pns';
+    $('insStatus').disabled=insuranceProduct!=='pns';
+    document.querySelectorAll('[data-insurance-product]').forEach(button=>{
+      const selected=button.dataset.insuranceProduct===insuranceProduct;
+      button.classList.toggle('selected',selected);button.setAttribute('aria-pressed',String(selected));
+    });
+    $('insuranceTenorHint').textContent=insuranceProduct==='pns'?`Tarif tersedia sampai ${rates[$('insStatus').value].length*12} bulan.`:'Dibulatkan ke atas per tahun.';
+    clearInsurance();
+  };
+  const resetInsurance=()=>{insuranceForm.reset();insuranceProduct='pns';syncInsurance();};
+  workForm.addEventListener('input',()=>renderWork());
+  workForm.addEventListener('change',()=>renderWork());
+  workForm.addEventListener('submit',event=>{event.preventDefault();renderWork(true);});
+  document.querySelectorAll('[data-insurance-product]').forEach(button=>button.addEventListener('click',()=>{
+    insuranceProduct=button.dataset.insuranceProduct;syncInsurance();
+  }));
+  const formatInsurancePrincipal = () => {
+    const field = $('insPrincipal');
+    const raw = field.value;
+    const cursor = field.selectionStart ?? raw.length;
+    const commaIndex = raw.indexOf(',');
+    const integerRaw = commaIndex < 0 ? raw : raw.slice(0,commaIndex);
+    const decimalsRaw = commaIndex < 0 ? '' : raw.slice(commaIndex+1);
+    const digits = integerRaw.replace(/\D/g,'').replace(/^0+(?=\d)/,'').slice(0,12);
+    const decimals = decimalsRaw.replace(/\D/g,'').slice(0,2);
+    const formatted = digits.replace(/\B(?=(\d{3})+(?!\d))/g,'.') + (commaIndex<0?'':','+decimals);
+    if (formatted === raw) return;
+    const digitsBefore = raw.slice(0,cursor).replace(/\D/g,'').length;
+    const inDecimals = commaIndex >= 0 && cursor > commaIndex;
+    field.value = formatted;
+    let nextCursor = 0;
+    if (inDecimals) {
+      const nextComma = formatted.indexOf(',');
+      nextCursor = nextComma < 0 ? formatted.length : Math.min(formatted.length,nextComma+1+raw.slice(commaIndex+1,cursor).replace(/\D/g,'').length);
+    } else {
+      let seen = 0;
+      while (nextCursor < formatted.length && seen < digitsBefore) {
+        if (/\d/.test(formatted[nextCursor])) seen++;
+        nextCursor++;
+      }
+    }
+    if (document.activeElement===field) field.setSelectionRange(nextCursor,nextCursor);
+  };
+  insuranceForm.addEventListener('input',event=>{
+    if (event.target.id==='insPrincipal') formatInsurancePrincipal();
+    clearInsurance();
+  });
+  $('insStatus').addEventListener('change',syncInsurance);
+  $('insPrincipal').addEventListener('paste',event=>{
+    if(KredioMoney.paste(event,$('insPrincipal'))===false)note('Nominal tidak valid. Periksa format angka.','warning');
+  });
+  $('insPrincipal').addEventListener('blur',()=>{
+    const amount=KredioMoney.parse($('insPrincipal').value);
+    if(amount!==null&&Number.isFinite(amount))$('insPrincipal').value=numberFormat.format(amount);
+  });
+  insuranceForm.addEventListener('submit',event=>{
+    event.preventDefault();clearInsurance();
+    const principal=KredioMoney.parse($('insPrincipal').value),months=Number($('insTenor').value);
+    try{
+      const result=calculatePremium({principal,months,product:insuranceProduct,status:$('insStatus').value});
+      premium=result.premium;
+      $('insPrincipal').value=numberFormat.format(principal);
+      $('insPremium').textContent=`Rp ${amountFormat.format(premium)}`;
+      $('insYears').textContent=`${result.years} tahun`;
+      $('insRate').textContent=`${numberFormat.format(insuranceProduct==='pppk'?5.5:result.rate)}‰`;
+      $('insCalculation').textContent=insuranceProduct==='pppk'?`Plafon × 5,5 × ${result.years} ÷ 1.000`:`Plafon × ${numberFormat.format(result.rate)} ÷ 1.000`;
+      $('copyInsurancePremium').disabled=false;
+    }catch(error){
+      $('insuranceCalcMessage').textContent=error.message;
+      const field=!Number.isFinite(principal)||principal<=0?$('insPrincipal'):$('insTenor');
+      field.setAttribute('aria-invalid','true');field.focus();note(error.message,'warning');
+    }
+  });
+  $('copyInsurancePremium').addEventListener('click',async()=>{
+    if(premium===null)return;
+    const text=amountFormat.format(premium);
+    try{
+      if(!navigator.clipboard?.writeText)throw new Error('Clipboard unavailable');
+      await navigator.clipboard.writeText(text);note('Nominal premi disalin.');
+    }catch{
+      const field=document.createElement('textarea');field.value=text;field.setAttribute('readonly','');
+      field.style.cssText='position:fixed;top:0;left:0;width:1px;height:1px;opacity:0';
+      document.body.append(field);field.select();
+      let copied=false;try{copied=document.execCommand('copy');}catch{}
+      field.remove();$('copyInsurancePremium').focus();
+      if(copied)note('Nominal premi disalin.');
+      else{const selection=window.getSelection(),range=document.createRange();range.selectNodeContents($('insPremium'));selection.removeAllRanges();selection.addRange(range);note('Salin nominal yang sudah dipilih secara manual.','info');}
+    }
+  });
+  resetWork();resetInsurance();
+  window.KredioCalculators=Object.freeze({
+    active:()=>!$('workCalculatorPane').hidden?'work':!$('insuranceCalculatorPane').hidden?'insurance':null,
+    hasValues:kind=>kind==='work'?workIds.some(id=>$(id).value!==workDefaults[id]):premium!==null||insuranceProduct!=='pns'||$('insPrincipal').value!==''||$('insTenor').value!==''||$('insStatus').value!=='aktif',
+    reset:kind=>{if(kind==='work')resetWork();else resetInsurance();note('Kalkulator sudah dikosongkan.');}
+  });
+})();
 </script>
 </body>
 </html>
