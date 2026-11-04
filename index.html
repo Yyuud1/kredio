@@ -304,8 +304,32 @@ window.KREDIO_SUPABASE = Object.freeze({
 <style id="kredio-old-loans-style">
 .loan-add{display:inline-flex;align-items:center;gap:5px;background:transparent;color:#707070;font:400 11px Poppins,sans-serif;padding:5px 0;white-space:nowrap}.loan-add>span{font-size:18px;line-height:1}.loan-add:hover{color:#222}.old-loan-second{position:relative;border:1px solid #e5e5e5;border-radius:10px;padding:13px 12px 14px;margin:17px 0 0;min-width:0}.old-loan-second legend{font-size:12px;font-weight:500;padding:0 6px}.old-loan-second .field-grid{margin:4px 0 0}.loan-remove{position:absolute;right:8px;top:-17px;width:28px;height:28px;border-radius:7px;border:1px solid #e5e5e5;background:#fff;color:#777;font-size:20px;line-height:1}.loan-remove:hover{background:#f4f4f4;color:#222}.loan-add:focus-visible,.loan-remove:focus-visible{outline:2px solid #777;outline-offset:3px}
 @media print{.print-old-loans{break-before:page;page-break-before:always}.print-salary{display:flex;justify-content:space-between;gap:20px;border-top:1px solid #ddd;padding-top:12px;margin-top:15px;font-size:11px}.print-old-loans h3{font-size:13px;margin:22px 0 8px}}
-</style></head>
-<body>
+</style><style id="kredio-access-style">
+body.kredio-locked{background:#f7f7f7}
+.access-screen{min-height:100svh;display:grid;place-items:center;padding:28px 20px}
+.access-card{width:100%;max-width:365px;padding:35px 30px 30px;background:#fff;border:1px solid #e7e7e7;border-radius:18px}
+.access-brand{font-size:36px;font-weight:600;letter-spacing:-1.8px;line-height:1.2;margin:0 0 33px;color:#292929}
+.access-brand span{color:#9b9b9b}
+.access-card label{display:block;margin-bottom:9px;font-size:13px;font-weight:400;color:#666}
+.access-card input{display:block;width:100%;min-height:50px;padding:13px 14px;border:1px solid #dedede;border-radius:9px;font:400 15px Poppins,sans-serif;color:#292929;background:#fff;outline:none;transition:border-color .18s,box-shadow .18s}
+.access-card input:focus{border-color:#999;box-shadow:0 0 0 3px #33333308}
+.access-card input[aria-invalid="true"]{border-color:#b76c6c}
+.access-card input::placeholder{color:#aaa}
+.access-card .primary-button{width:100%;min-height:48px;margin-top:20px;font-size:14px;display:flex;align-items:center;justify-content:space-between}
+.access-error{font-size:12px;line-height:1.5;color:#a65353;margin:10px 0 0}
+.access-error:empty{display:none}
+@media(max-width:480px){.access-card{padding:30px 25px}.access-card input{font-size:16px}.access-brand{font-size:34px}}
+@media print{.access-screen{display:none!important}body.kredio-locked #kredioProtected{display:none!important}}
+</style>
+</head>
+<body class="kredio-locked">
+<main id="kredioAccessScreen" class="access-screen" aria-label="Masuk Kredio">
+<section class="access-card" aria-labelledby="kredioAccessTitle"><h1 id="kredioAccessTitle" class="access-brand">kredio<span>.</span></h1>
+<form id="kredioAccessForm" autocomplete="on" novalidate>
+<label for="kredioUsername">Username</label><input id="kredioUsername" name="username" type="text" autocomplete="username" autocapitalize="none" autocorrect="off" spellcheck="false" placeholder="Username" maxlength="40" required aria-describedby="kredioAccessError">
+<p id="kredioAccessError" class="access-error" role="status"></p>
+<button type="submit" class="primary-button">Masuk <i class="fi fi-rr-arrow-small-right" aria-hidden="true"></i></button>
+</form></section></main>
 <div class="entry-loader" id="entryLoader" role="status" aria-label="Memuat Kredio"><div class="entry-inner" aria-hidden="true"><div class="entry-word"><span>kred</span><span class="entry-i">i<span class="entry-i-target"></span></span><span>o</span><span class="entry-period">.<span class="entry-ball-shadow"></span><span class="entry-ball"></span></span></div></div></div>
 <script id="kredio-loader-script">
 (() => {
@@ -371,6 +395,7 @@ window.KREDIO_SUPABASE = Object.freeze({
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',start,{once:true});else void start();
 })();
 </script>
+<div id="kredioProtected" hidden inert>
 <div class="app-shell">
 <header class="topbar">
 <a class="brand" href="#" aria-label="Kredio, beranda"><svg viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="18" fill="currentColor"/><path d="M19 16v32M44 17L29 32l15 15" fill="none" stroke="#f6f6f2" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/></svg><span>kredio<span class="brand-dot">.</span></span></a>
@@ -2812,6 +2837,39 @@ https://github.com/nodeca/pako/blob/main/LICENSE
     active:()=>!$('workCalculatorPane').hidden?'work':!$('insuranceCalculatorPane').hidden?'insurance':null,
     hasValues:kind=>kind==='work'?workIds.some(id=>$(id).value!==workDefaults[id]):premium!==null||insuranceProduct!=='pns'||$('insPrincipal').value!==''||$('insTenor').value!==''||$('insStatus').value!=='aktif',
     reset:kind=>{if(kind==='work')resetWork();else resetInsurance();note('Kalkulator sudah dikosongkan.');}
+  });
+})();
+</script>
+</div>
+<script id="kredio-access-script">
+(() => {
+  'use strict';
+  const key='kredio-access-v1';
+  const screen=document.getElementById('kredioAccessScreen');
+  const content=document.getElementById('kredioProtected');
+  const form=document.getElementById('kredioAccessForm');
+  const input=document.getElementById('kredioUsername');
+  const error=document.getElementById('kredioAccessError');
+  const open=()=>{
+    screen.hidden=true;content.hidden=false;content.inert=false;
+    document.body.classList.remove('kredio-locked');
+    input.value='';error.textContent='';input.removeAttribute('aria-invalid');
+  };
+  let remembered=false;
+  try{remembered=sessionStorage.getItem(key)==='analis';}catch{}
+  if(remembered)open();
+  input.addEventListener('input',()=>{error.textContent='';input.removeAttribute('aria-invalid');});
+  form.addEventListener('submit',event=>{
+    event.preventDefault();
+    const username=input.value.trim();
+    if(username!=='analis'){
+      const message=username?'Username tidak sesuai.':'Isi username terlebih dahulu.';
+      error.textContent=message;input.setAttribute('aria-invalid','true');input.focus();
+      if(window.Swal)Swal.fire({toast:true,position:'top-end',icon:'warning',title:message,showConfirmButton:false,timer:2400,timerProgressBar:true});
+      return;
+    }
+    try{sessionStorage.setItem(key,'analis');}catch{}
+    open();document.getElementById('newCreditButton').focus();
   });
 })();
 </script>
