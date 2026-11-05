@@ -3097,23 +3097,7 @@ button:focus-visible,a:focus-visible,summary:focus-visible{outline:2px solid var
 .tenor-card>.input-shell:focus-within{box-shadow:none}
 .tenor-card>.input-shell input{font-family:Poppins,Arial,sans-serif;font-size:22px;font-weight:500;letter-spacing:-.03em;text-align:right;padding:4px 6px 4px 0}
 .tenor-card>.input-shell .suffix{font-size:15px;padding-right:0}
-.tenor-card>.k-slider{grid-area:2/1/3/3}
-.tenor-card>.field-error{grid-area:3/1/4/3}
-
-.k-slider{margin-top:12px}
-.k-slider input[type=range]{-webkit-appearance:none;appearance:none;display:block;width:100%;height:24px;margin:0;background:transparent;cursor:pointer;--p:0%}
-.k-slider input[type=range]::-webkit-slider-runnable-track{height:4px;border-radius:4px;background:linear-gradient(90deg,var(--ink) var(--p),#dcd9d0 var(--p))}
-.k-slider input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:24px;height:24px;margin-top:-10px;border-radius:50%;background:#fff;border:1px solid var(--ink);box-shadow:0 2px 8px #00000026}
-.k-slider input[type=range]::-moz-range-track{height:4px;border-radius:4px;background:#dcd9d0}
-.k-slider input[type=range]::-moz-range-progress{height:4px;border-radius:4px;background:var(--ink)}
-.k-slider input[type=range]::-moz-range-thumb{width:22px;height:22px;border-radius:50%;background:#fff;border:1px solid var(--ink);box-shadow:0 2px 8px #00000026}
-.k-slider input[type=range]:focus{outline:none}
-.k-slider input[type=range]:focus-visible::-webkit-slider-thumb{box-shadow:0 0 0 4px #14141426}
-.k-slider input[type=range]:focus-visible::-moz-range-thumb{box-shadow:0 0 0 4px #14141426}
-.k-ticks{position:relative;height:18px;margin-top:2px;font-size:11px;color:var(--muted);font-variant-numeric:tabular-nums}
-.k-ticks span{position:absolute;top:0;left:calc(12px + (100% - 24px) * var(--f));transform:translateX(-50%);white-space:nowrap}
-.k-ticks span:first-child{transform:translateX(-12px)}
-.k-ticks span:last-child{transform:translateX(calc(-100% + 12px))}
+.tenor-card>.field-error{grid-area:2/1/3/3}
 
 .check-row label{font-size:13px;color:var(--ink)}
 .check-row input[type=checkbox]{accent-color:var(--ink)}
@@ -3187,8 +3171,7 @@ button:focus-visible,a:focus-visible,summary:focus-visible{outline:2px solid var
 .field-hint,.label-optional,.dsr-chip,.salary-remainder small,
 .capacity-copy p,.capacity-data>p,.simulation-note,
 .calculator-heading,.entry-header,.entry-footnote,.work-cell small,.calculator-hint,
-.insurance-formula,.insurance-result>small,.calculator-source,
-.k-ticks span:not(:first-child):not(:last-child){display:none}
+.insurance-formula,.insurance-result>small,.calculator-source{display:none}
 .k-comp{margin:26px 0 0}
 .payment-label{margin:22px 0 10px}
 
@@ -3311,78 +3294,8 @@ footer{border-top-color:var(--line);color:var(--muted)}
   });
   setTitle('newCreditButton');
 
-  /* Sliders that drive the existing inputs. */
-  const fmt = n => Math.round(n).toLocaleString('id-ID');
-  const digits = value => Number(String(value || '').replace(/\D/g, '')) || 0;
-  const sliders = [];
-  const buildSlider = ({inputId, min, max, step, parse, format, label, ticks}) => {
-    const input = $(inputId);
-    if (!input) return null;
-    const field = input.closest('.field');
-    const shell = input.closest('.input-shell');
-    const wrap = document.createElement('div');
-    wrap.className = 'k-slider';
-    const range = document.createElement('input');
-    range.type = 'range';
-    range.min = String(min);
-    range.max = String(max);
-    range.step = String(step);
-    range.setAttribute('aria-label', label);
-    range.tabIndex = 0;
-    const scale = document.createElement('div');
-    scale.className = 'k-ticks';
-    scale.setAttribute('aria-hidden', 'true');
-    ticks.forEach(([value, text]) => {
-      const tick = document.createElement('span');
-      tick.textContent = text;
-      tick.style.setProperty('--f', String((value - min) / (max - min)));
-      scale.append(tick);
-    });
-    wrap.append(range, scale);
-    shell.after(wrap);
-    const paint = () => {
-      const f = (Number(range.value) - min) / (max - min);
-      range.style.setProperty('--p', `calc(12px + (100% - 24px) * ${f})`);
-      range.setAttribute('aria-valuetext', format(Number(range.value)));
-    };
-    const pull = () => {
-      const raw = parse(input.value);
-      const next = Math.min(max, Math.max(min, raw || min));
-      if (Number(range.value) !== next || range.dataset.ready !== '1') {
-        range.value = String(next);
-        range.dataset.ready = '1';
-      }
-      paint();
-    };
-    range.addEventListener('input', () => {
-      input.value = inputId === 'principal' ? fmt(Number(range.value)) : String(range.value);
-      input.dispatchEvent(new Event('input', {bubbles: true}));
-      paint();
-    });
-    input.addEventListener('input', pull);
-    input.addEventListener('change', pull);
-    sliders.push(pull);
-    pull();
-    return field;
-  };
-
-  buildSlider({
-    inputId: 'principal', min: 10000000, max: 500000000, step: 1000000,
-    parse: digits, format: v => 'Rp ' + fmt(v), label: 'Atur jumlah pinjaman',
-    ticks: [[10000000, 'Rp 10 jt'], [250000000, 'Rp 250 jt'], [500000000, 'Rp 500 jt']]
-  });
-  const tenorField = buildSlider({
-    inputId: 'tenor', min: 12, max: 240, step: 1,
-    parse: v => Number(v) || 0, format: v => v + ' bulan', label: 'Atur jangka waktu',
-    ticks: [[12, '12'], [60, '60'], [120, '120'], [180, '180'], [240, '240']]
-  });
+  const tenorField = $('tenor')?.closest('.field');
   if (tenorField) tenorField.classList.add('tenor-card');
-
-  /* Catch programmatic changes (reset, tenor capped by retirement date, "Sesuaikan plafon"). */
-  setInterval(() => {
-    if (document.hidden) return;
-    sliders.forEach(pull => pull());
-  }, 400);
 
   /* Composition bar: principal vs interest, fed by the calculator's own result. */
   const card = document.querySelector('.payment-card');
