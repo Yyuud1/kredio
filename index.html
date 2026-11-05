@@ -347,8 +347,8 @@ body.kredio-locked{background:#f7f7f7}
 <body class="kredio-locked">
 <main id="kredioAccessScreen" class="access-screen" aria-label="Masuk Kredio">
 <section class="access-card" aria-labelledby="kredioAccessTitle"><h1 id="kredioAccessTitle" class="access-brand">kredio<span>.</span></h1>
-<form id="kredioAccessForm" autocomplete="on" novalidate>
-<label for="kredioUsername">Username</label><input id="kredioUsername" name="username" type="text" autocomplete="username" autocapitalize="none" autocorrect="off" spellcheck="false" placeholder="Username" maxlength="40" required aria-describedby="kredioAccessError">
+<form id="kredioAccessForm" autocomplete="off" novalidate>
+<label for="kredioUsername">Username</label><input id="kredioUsername" name="username" type="text" autocomplete="off" autocapitalize="none" autocorrect="off" spellcheck="false" placeholder="Username" maxlength="40" required aria-describedby="kredioAccessError">
 <p id="kredioAccessError" class="access-error" role="status"></p>
 <button type="submit" class="primary-button">Masuk <i class="fi fi-rr-arrow-small-right" aria-hidden="true"></i></button>
 </form></section></main>
@@ -2335,7 +2335,31 @@ const KredioMath = (() => {
       return 'failed';
     }
   };
-  $('historyButton').addEventListener('click',()=>{
+  let pinPending=false;
+  $('historyButton').addEventListener('click',async()=>{
+    if(pinPending || dialog.open)return;
+    pinPending=true;
+    try{
+      const prompt=await Swal.fire({
+        title:'PIN History',
+        input:'password',
+        inputLabel:'Masukkan PIN untuk melihat History',
+        inputPlaceholder:'PIN',
+        inputAttributes:{inputmode:'numeric',maxlength:'3',autocomplete:'off',autocapitalize:'off'},
+        showCancelButton:true,
+        confirmButtonText:'Buka History',
+        cancelButtonText:'Batal',
+        reverseButtons:true,
+        preConfirm:value=>{
+          if(value!=='080'){
+            Swal.showValidationMessage('PIN tidak sesuai.');
+            return false;
+          }
+          return value;
+        }
+      });
+      if(!prompt.isConfirmed)return;
+    }finally{pinPending=false;}
     dialog.showModal();document.body.classList.add('dialog-open');void load(1);
     clearInterval(state.timer);
     state.timer=setInterval(()=>{if(dialog.open && !document.hidden && state.page===1 && !state.busy)void load(1,true);},30000);
@@ -2980,7 +3004,6 @@ https://github.com/nodeca/pako/blob/main/LICENSE
 <script id="kredio-access-script">
 (() => {
   'use strict';
-  const key='kredio-access-v1';
   const screen=document.getElementById('kredioAccessScreen');
   const content=document.getElementById('kredioProtected');
   const form=document.getElementById('kredioAccessForm');
@@ -2991,9 +3014,8 @@ https://github.com/nodeca/pako/blob/main/LICENSE
     document.body.classList.remove('kredio-locked');
     input.value='';error.textContent='';input.removeAttribute('aria-invalid');
   };
-  let remembered=false;
-  try{remembered=sessionStorage.getItem(key)==='analis';}catch{}
-  if(remembered)open();
+  input.value='';
+  try{sessionStorage.removeItem('kredio-access-v1');}catch{}
   input.addEventListener('input',()=>{error.textContent='';input.removeAttribute('aria-invalid');});
   form.addEventListener('submit',event=>{
     event.preventDefault();
@@ -3004,7 +3026,6 @@ https://github.com/nodeca/pako/blob/main/LICENSE
       if(window.Swal)Swal.fire({toast:true,position:'top-end',icon:'warning',title:message,showConfirmButton:false,timer:2400,timerProgressBar:true});
       return;
     }
-    try{sessionStorage.setItem(key,'analis');}catch{}
     open();document.getElementById('newCreditButton').focus();
   });
 })();
