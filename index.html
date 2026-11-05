@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#252625">
+<meta name="theme-color" content="#f3f1ec">
 <meta name="description" content="Kredio — simulasi kredit multiguna PNS dan PPPK.">
 <title>Kredio</title>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='18' fill='%23252625'/%3E%3Cpath d='M19 16v32M44 17L29 32l15 15' fill='none' stroke='%23f6f6f2' stroke-width='6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
@@ -1190,7 +1190,7 @@ const KredioMath = (() => {
     const years = Math.floor(result.months/12), remaining = result.months%12;
     const humanTenor = years ? `${years} tahun${remaining?' '+remaining+' bulan':''}` : `${remaining} bulan`;
     setText('resultTenor',humanTenor);
-    setText('resultRate',percentNumber.format(result.annualRate)+'% / tahun');
+    setText('resultRate',percentNumber.format(result.annualRate)+'% / tahun');window.dispatchEvent(new CustomEvent('kredio:result',{detail:{principal:money(result.principal),interest:money(result.totalInterest),share:result.principal/(result.principal+result.totalInterest)}}));
     const values={feePrincipal:result.principal,feeProvision:result.provision,feeAdmin:result.admin,feePrint:result.print,feeBlock:result.block,netValue:result.net};
     Object.entries(values).forEach(([id,value])=>setText(id,money(value)));
     setText('provisionHint',result.promoProvision?'promo':'0,5%');
@@ -3007,6 +3007,410 @@ https://github.com/nodeca/pako/blob/main/LICENSE
     try{sessionStorage.setItem(key,'analis');}catch{}
     open();document.getElementById('newCreditButton').focus();
   });
+})();
+</script>
+<style id="kredio-redesign-style">
+@media screen{
+:root{--paper:#f3f1ec;--white:#fbfaf7;--ink:#141414;--muted:#77746d;--line:#e4e1d9;--soft:#e9e6df;--dark:#141414;--danger:#a94a40;--danger-bg:#f8e9e4;--radius:26px;--acc:#c8f169;--accink:#1c2a05;font-family:Poppins,Arial,sans-serif}
+body{background:var(--paper);font-family:Poppins,Arial,sans-serif;letter-spacing:0}
+.work-cell input,.access-card input{font-family:inherit}
+.brand>span,.access-brand{font-family:Poppins,Arial,sans-serif}
+button:focus-visible,a:focus-visible,summary:focus-visible{outline:2px solid var(--ink);outline-offset:3px}
+.credit-menu-button:focus-visible{outline-offset:1px}
+
+/* ---------- Topbar ---------- */
+.app-shell{width:min(1200px,calc(100% - 96px))}
+@media(min-width:1200px){.app-shell{width:1200px}}
+.topbar{height:auto;min-height:0;border-bottom:0;padding:30px 0 0;gap:14px 20px;flex-wrap:wrap}
+.brand svg{display:none}
+.brand>span{font-size:27px;letter-spacing:-.06em}
+.brand-dot{color:#a9a69d}
+.topbar-actions{gap:22px;margin-left:auto}
+.topbar nav{gap:20px}
+.nav-divider{display:none}
+.quiet-button{font-size:13px;color:var(--muted);font-weight:500;padding:8px 0}
+.quiet-button:hover{color:var(--ink)}
+.quiet-button .fi{display:none}
+.bank-jambi-mark{border-left:1px solid var(--line);padding-left:22px}
+.bank-jambi-mark img{width:132px}
+
+.credit-menu{order:3;display:flex;flex-wrap:nowrap;width:max-content;max-width:100%;margin:0;padding:4px;gap:2px;background:var(--soft);border-radius:999px;overflow-x:auto;scrollbar-width:none}
+.credit-menu::-webkit-scrollbar{display:none}
+.credit-menu-button{min-width:0;min-height:38px;padding:8px 18px;border-radius:999px;background:transparent;color:var(--muted);font-size:13px;font-weight:500;white-space:nowrap;flex:none}
+.credit-menu-button:hover:not(.is-active){color:var(--ink)}
+.credit-menu-button.is-active{background:#fff;color:var(--ink);box-shadow:0 1px 3px #00000014}
+@media(min-width:1180px){.credit-menu{order:0}.topbar{flex-wrap:nowrap}.topbar-actions{margin-left:0}}
+
+/* ---------- Heading ---------- */
+.page-heading{padding:34px 0 24px}
+.page-heading .eyebrow{font-size:11px;font-weight:500;letter-spacing:.14em;color:var(--muted);margin:0 0 14px}
+.page-heading h1{font-family:Poppins,Arial,sans-serif;font-size:clamp(28px,3.2vw,40px);font-weight:500;letter-spacing:-.045em;line-height:1.1;margin:0}
+.page-heading h1>span{color:#a9a69d}
+.heading-note,.intro{display:none}
+
+/* ---------- Layout ---------- */
+.workspace{grid-template-columns:minmax(0,1fr) 470px;gap:48px}
+@media(min-width:1200px){.workspace{grid-template-columns:minmax(0,1fr) 470px}}
+.result-column{gap:16px}
+.section-index{display:none}
+
+/* ---------- Form ---------- */
+@media(min-width:941px){
+#newCreditPane .form-card,.topup-form{height:clamp(520px,calc(100dvh - 215px),820px)}
+#creditForm>.form-bottom,#topUpForm>.form-bottom{background:transparent;border-top:0;padding-top:0;margin-top:14px}
+#creditForm>.form-scroll,#topUpForm>.form-scroll{padding:4px 12px 10px 4px;margin-left:-4px;scrollbar-color:#cfccc3 transparent}
+.form-scroll::-webkit-scrollbar{width:6px}
+.form-scroll::-webkit-scrollbar-track{background:transparent}
+.form-scroll::-webkit-scrollbar-thumb{background:#cfccc3;border-radius:8px}
+}
+.form-card{background:transparent;border:0;padding:0}
+.form-card>.section-heading{display:none}
+.product-switch{background:var(--soft);border-radius:999px;padding:4px;gap:2px;margin-bottom:22px}
+.product-button{border-radius:999px;padding:12px 16px;color:var(--muted);font-size:14px}
+.product-button.selected{background:var(--ink);color:#fff;box-shadow:none}
+.field label{font-size:12px;color:var(--muted);font-weight:500;margin-bottom:9px}
+.label-optional{font-size:11px;color:#a9a69d}
+.input-shell{background:var(--white);border:1px solid var(--line);border-radius:16px;min-height:56px}
+.input-shell:focus-within{border-color:var(--ink);box-shadow:0 0 0 4px #14141412}
+.input-shell input{font-size:16px;padding:15px 18px}
+.input-shell input[type=date]{font-size:15px}
+.input-shell select{font-size:15px;padding:0 14px}
+.input-shell .prefix{font-size:15px;color:var(--muted);padding-left:18px}
+.input-shell .prefix+input{padding-left:8px}
+.suffix{font-size:13px;color:var(--muted);padding-right:18px}
+.field-grid{gap:20px 16px}
+.field-error{font-size:12px}
+.field-hint{font-size:11px}
+.debtor-field{margin-bottom:20px}
+
+.principal-field{background:var(--white);border:1px solid var(--line);border-radius:22px;padding:20px 24px 22px;margin-bottom:20px}
+.principal-field>label{font-size:11px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;margin-bottom:4px}
+.principal-field .input-shell.large{background:transparent;border:0;box-shadow:none;min-height:0;overflow:visible}
+.principal-field .input-shell.large:focus-within{box-shadow:none}
+.principal-field .input-shell.large .prefix{font-size:22px;color:var(--muted);padding:0 8px 0 0;align-self:flex-end;padding-bottom:9px}
+.principal-field .input-shell.large input{font-family:Poppins,Arial,sans-serif;font-size:40px;font-weight:500;letter-spacing:-.04em;padding:6px 0 0;line-height:1.2;font-variant-numeric:tabular-nums}
+.principal-field .input-shell.large input::placeholder{color:#c3c0b8}
+
+.tenor-card{grid-column:1/-1;background:var(--white);border:1px solid var(--line);border-radius:22px;padding:18px 24px 20px;display:grid;grid-template-columns:1fr auto;column-gap:12px;align-items:center}
+.tenor-card>label{grid-area:1/1;margin:0;font-size:11px;font-weight:500;letter-spacing:.14em;text-transform:uppercase}
+.tenor-card>.input-shell{grid-area:1/2;min-height:0;width:170px;background:transparent;border:0;box-shadow:none;justify-content:flex-end;overflow:visible}
+.tenor-card>.input-shell:focus-within{box-shadow:none}
+.tenor-card>.input-shell input{font-family:Poppins,Arial,sans-serif;font-size:22px;font-weight:500;letter-spacing:-.03em;text-align:right;padding:4px 6px 4px 0}
+.tenor-card>.input-shell .suffix{font-size:15px;padding-right:0}
+.tenor-card>.k-slider{grid-area:2/1/3/3}
+.tenor-card>.field-error{grid-area:3/1/4/3}
+
+.k-slider{margin-top:12px}
+.k-slider input[type=range]{-webkit-appearance:none;appearance:none;display:block;width:100%;height:24px;margin:0;background:transparent;cursor:pointer;--p:0%}
+.k-slider input[type=range]::-webkit-slider-runnable-track{height:4px;border-radius:4px;background:linear-gradient(90deg,var(--ink) var(--p),#dcd9d0 var(--p))}
+.k-slider input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:24px;height:24px;margin-top:-10px;border-radius:50%;background:#fff;border:1px solid var(--ink);box-shadow:0 2px 8px #00000026}
+.k-slider input[type=range]::-moz-range-track{height:4px;border-radius:4px;background:#dcd9d0}
+.k-slider input[type=range]::-moz-range-progress{height:4px;border-radius:4px;background:var(--ink)}
+.k-slider input[type=range]::-moz-range-thumb{width:22px;height:22px;border-radius:50%;background:#fff;border:1px solid var(--ink);box-shadow:0 2px 8px #00000026}
+.k-slider input[type=range]:focus{outline:none}
+.k-slider input[type=range]:focus-visible::-webkit-slider-thumb{box-shadow:0 0 0 4px #14141426}
+.k-slider input[type=range]:focus-visible::-moz-range-thumb{box-shadow:0 0 0 4px #14141426}
+.k-ticks{position:relative;height:18px;margin-top:2px;font-size:11px;color:var(--muted);font-variant-numeric:tabular-nums}
+.k-ticks span{position:absolute;top:0;left:calc(12px + (100% - 24px) * var(--f));transform:translateX(-50%);white-space:nowrap}
+.k-ticks span:first-child{transform:translateX(-12px)}
+.k-ticks span:last-child{transform:translateX(calc(-100% + 12px))}
+
+.check-row label{font-size:13px;color:var(--ink)}
+.check-row input[type=checkbox]{accent-color:var(--ink)}
+.dsr-chip{font-size:11px;font-weight:600;background:var(--acc);color:var(--accink);border:0;border-radius:999px;padding:5px 11px}
+.more-options{border-color:var(--line)}
+.more-options summary{font-size:13px}
+.promo-tag{background:var(--acc);color:var(--accink)}
+.form-bottom{margin-top:26px}
+.rate-inline{font-size:13px;color:var(--muted)}
+.rate-inline strong{font-size:15px;color:var(--ink);font-weight:600}
+.rate-inline small{font-size:12px;color:var(--muted)}
+.primary-button{background:var(--acc);color:var(--accink);border-radius:18px;min-height:58px;padding:0 24px;font-size:15px;font-weight:600}
+.primary-button:hover:not(:disabled),.primary-button:focus-visible{background:#d6f67f;color:var(--accink)}
+.primary-button:disabled{opacity:.5}
+
+/* ---------- Result ---------- */
+.payment-card{background:var(--ink);color:#fff;border-radius:32px;padding:30px 32px 28px}
+.payment-top{color:#8d8a82;font-size:12px;letter-spacing:0}
+.payment-top .fi{display:none}
+#resultProduct,#tuResultProduct{background:var(--acc);color:var(--accink);padding:6px 13px;border-radius:999px;font-weight:600;font-size:12px}
+.payment-label{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#8d8a82;margin:26px 0 12px}
+.payment-value{min-height:0;gap:8px;line-height:1}
+.currency-label{font-size:24px;color:#8d8a82;letter-spacing:0}
+#paymentAmount,#tuPaymentAmount{font-family:Poppins,Arial,sans-serif;font-size:54px;font-weight:500;letter-spacing:-.04em;line-height:1}
+.payment-value.compact #paymentAmount,.payment-value.compact #tuPaymentAmount{font-size:42px}
+.payment-caption{font-size:13px;color:#8d8a82;margin:12px 0 22px}
+.payment-meta{border-top-color:#2c2c2a;padding-top:20px}
+.payment-meta span{font-size:12px;color:#8d8a82}
+.payment-meta strong{font-size:15px;font-weight:500}
+.k-comp{margin:0 0 22px}
+.k-comp-title{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#8d8a82}
+.k-comp-bar{display:flex;gap:3px;height:10px;margin:12px 0 10px;border-radius:10px;overflow:hidden}
+.k-comp-bar i{display:block;transition:width .5s ease}
+.k-comp-bar i:first-child{background:#fff}
+.k-comp-bar i:last-child{background:var(--acc)}
+.k-comp-legend{display:flex;flex-wrap:wrap;justify-content:space-between;gap:4px 14px;font-size:13px;color:#b9b6ae}
+.k-comp-legend b{color:#fff;font-weight:500;margin-left:6px;font-variant-numeric:tabular-nums}
+
+.breakdown-card,.topup-form{background:var(--white);border:1px solid var(--line);border-radius:26px;padding:24px 26px}
+.breakdown-card .section-heading{margin-bottom:18px}
+.breakdown-card .section-heading h2{font-size:11px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.fee-list{gap:14px}
+.fee-list dt{font-size:13px;color:var(--muted)}
+.fee-list dt>span{font-size:11px}
+.fee-list dd{font-size:14px;color:var(--ink);font-weight:500}
+.net-cash{background:var(--acc);color:var(--accink);border:0;border-radius:20px;padding:18px 20px;margin-top:20px}
+.net-cash>div{font-size:12px;color:#3d4d15}
+.net-cash .fi{color:#3d4d15;font-size:16px}
+.net-cash>strong{font-family:Poppins,Arial,sans-serif;font-size:26px;letter-spacing:-.03em;color:var(--accink);margin-top:6px}
+.net-cash p{color:#3d4d15;font-size:12px}
+.net-cash.negative{background:#f4d9d2}
+.net-cash.negative>strong{color:var(--danger)}
+.secondary-button{min-height:50px;border-radius:16px;border:1px solid var(--line);background:var(--white);color:var(--ink);font-size:13px;font-weight:500}
+.secondary-button:hover:not(:disabled){background:#fff;border-color:var(--ink)}
+.secondary-button:disabled{opacity:.45}
+#downloadSummary:not(:disabled){background:var(--ink);border-color:var(--ink);color:#fff}
+#downloadSummary:not(:disabled):hover{background:#2b2b2b}
+.result-actions{gap:10px}
+
+.capacity-panel{background:var(--white);border:1px solid var(--line);border-radius:22px;margin-top:24px;padding:20px 24px}
+.capacity-panel.over{background:var(--danger-bg);border-color:#eedbd6}
+.capacity-status{font-size:14px}
+.capacity-track{height:6px;background:#e4e1d9}
+.capacity-track>span{background:var(--ink)}
+.simulation-note{color:var(--muted)}
+
+/* ---------- Less text ---------- */
+.page-heading .eyebrow,.heading-note,.intro,
+#paymentCaption,.payment-meta,.k-comp-title,
+.fee-list dt>span,#promoApplied,.net-cash p,.net-cash .fi,
+.field-hint,.label-optional,.dsr-chip,.salary-remainder small,
+.capacity-copy p,.capacity-data>p,.simulation-note,
+.calculator-heading,.entry-header,.entry-footnote,.work-cell small,.calculator-hint,
+.insurance-formula,.insurance-result>small,.calculator-source,
+.k-ticks span:not(:first-child):not(:last-child){display:none}
+.k-comp{margin:26px 0 0}
+.payment-label{margin:22px 0 10px}
+
+/* ---------- Compact result column ---------- */
+.result-column{gap:12px}
+.payment-card{padding:24px 28px 22px}
+.payment-label{margin:18px 0 8px}
+.breakdown-card .section-heading{display:none}
+.breakdown-card,.topup-form{padding:20px 24px}
+.fee-list{gap:10px}
+.net-cash{margin-top:16px;padding:16px 20px}
+.net-cash>strong{font-size:25px;margin-top:4px}
+.salary-remainder{margin-top:14px;padding-top:12px}
+.result-actions{gap:8px}
+.secondary-button{min-height:46px}
+
+/* ---------- Other panes ---------- */
+.insurance-result{background:#efede7;border-radius:20px}
+.work-cell{background:var(--white)}
+.entry-workspace,.calculator-pane{background:var(--white)}
+footer{border-top-color:var(--line);color:var(--muted)}
+
+/* ---------- Access screen ---------- */
+.access-card{background:var(--white);border-color:var(--line);border-radius:28px}
+.access-card input{border-radius:16px;border-color:var(--line);background:#fff}
+.access-card input:focus{border-color:var(--ink);box-shadow:0 0 0 4px #14141412}
+
+/* ---------- Tablet ---------- */
+@media(max-width:1100px){
+.app-shell{width:calc(100% - 64px)}
+.workspace{grid-template-columns:minmax(0,1fr) 400px;gap:32px}
+#paymentAmount,#tuPaymentAmount{font-size:44px}
+.payment-value.compact #paymentAmount,.payment-value.compact #tuPaymentAmount{font-size:36px}
+}
+@media(max-width:940px){
+.app-shell{width:calc(100% - 48px)}
+.workspace{grid-template-columns:1fr;gap:18px}
+.result-column{display:contents}
+.payment-card{order:-1}
+.page-heading{padding:28px 0 20px}
+}
+
+/* ---------- Mobile ---------- */
+@media(max-width:730px){
+.app-shell{width:calc(100% - 32px);max-width:560px}
+.topbar{padding-top:20px;gap:14px 12px}
+.brand>span{font-size:23px}
+.topbar-actions{gap:12px}
+.topbar nav{gap:6px}
+.quiet-button{padding:8px;font-size:12px}
+.bank-jambi-mark{padding-left:12px}
+.bank-jambi-mark img{width:104px}
+.credit-menu{width:100%;border-radius:999px}
+.credit-menu-button{min-height:36px;padding:7px 15px;font-size:13px}
+.page-heading{padding:24px 0 18px}
+.page-heading h1{font-size:clamp(28px,8vw,34px)}
+.page-heading .eyebrow{font-size:10px}
+.payment-card{padding:24px 24px 22px;border-radius:28px}
+#paymentAmount,#tuPaymentAmount{font-size:40px}
+.payment-value.compact #paymentAmount,.payment-value.compact #tuPaymentAmount{font-size:32px}
+.currency-label{font-size:20px}
+.breakdown-card,.topup-form{padding:22px 22px}
+.principal-field{padding:18px 20px 20px}
+.principal-field .input-shell.large input{font-size:32px}
+.principal-field .input-shell.large .prefix{font-size:18px;padding-bottom:7px}
+.tenor-card{padding:16px 20px 18px}
+.tenor-card>.input-shell{width:140px}
+.tenor-card>.input-shell input{font-size:22px}
+.input-shell input,.input-shell input[type=date],.input-shell select{font-size:16px}
+.field label{font-size:12px}
+.check-row label{font-size:13px}
+.net-cash>strong{font-size:26px}
+.fee-list dt{font-size:13px}
+.fee-list dd{font-size:14px}
+}
+@media(max-width:500px){
+.quiet-button .fi,.topbar nav #historyButton .fi{display:inline-flex}
+.quiet-button span,.topbar nav #historyButton span{display:none}
+.k-comp-legend{font-size:12px}
+.topbar nav .quiet-button{padding:8px 7px}
+}
+@media(max-width:370px){
+.app-shell{width:calc(100% - 24px)}
+.bank-jambi-mark img{width:84px}
+.bank-jambi-mark{padding-left:8px}
+.brand>span{font-size:21px}
+#paymentAmount,#tuPaymentAmount{font-size:36px}
+}
+}
+</style>
+<script id="kredio-redesign-script">
+(() => {
+  'use strict';
+  const $ = id => document.getElementById(id);
+  const topbar = document.querySelector('.topbar');
+  const actions = topbar && topbar.querySelector('.topbar-actions');
+  const menu = document.querySelector('.credit-menu');
+  const heading = document.querySelector('.page-heading h1');
+
+  /* Tab menu sits in the header; CSS decides whether it shares the row or wraps. */
+  if (topbar && actions && menu) topbar.insertBefore(menu, actions);
+
+  /* Headline follows the active tab. */
+  const titles = {
+    newCreditButton: 'Simulasi kredit',
+    topUpButton: 'Top up',
+    dataEntryButton: 'Data entry',
+    workCalculatorButton: 'Masa kerja',
+    insuranceCalculatorButton: 'Asuransi'
+  };
+  const setTitle = id => {
+    if (!heading || !titles[id]) return;
+    const dot = document.createElement('span');
+    dot.textContent = '.';
+    heading.replaceChildren(document.createTextNode(titles[id]), dot);
+  };
+  Object.keys(titles).forEach(id => {
+    const button = $(id);
+    if (button) button.addEventListener('click', () => setTitle(id));
+  });
+  setTitle('newCreditButton');
+
+  /* Sliders that drive the existing inputs. */
+  const fmt = n => Math.round(n).toLocaleString('id-ID');
+  const digits = value => Number(String(value || '').replace(/\D/g, '')) || 0;
+  const sliders = [];
+  const buildSlider = ({inputId, min, max, step, parse, format, label, ticks}) => {
+    const input = $(inputId);
+    if (!input) return null;
+    const field = input.closest('.field');
+    const shell = input.closest('.input-shell');
+    const wrap = document.createElement('div');
+    wrap.className = 'k-slider';
+    const range = document.createElement('input');
+    range.type = 'range';
+    range.min = String(min);
+    range.max = String(max);
+    range.step = String(step);
+    range.setAttribute('aria-label', label);
+    range.tabIndex = 0;
+    const scale = document.createElement('div');
+    scale.className = 'k-ticks';
+    scale.setAttribute('aria-hidden', 'true');
+    ticks.forEach(([value, text]) => {
+      const tick = document.createElement('span');
+      tick.textContent = text;
+      tick.style.setProperty('--f', String((value - min) / (max - min)));
+      scale.append(tick);
+    });
+    wrap.append(range, scale);
+    shell.after(wrap);
+    const paint = () => {
+      const f = (Number(range.value) - min) / (max - min);
+      range.style.setProperty('--p', `calc(12px + (100% - 24px) * ${f})`);
+      range.setAttribute('aria-valuetext', format(Number(range.value)));
+    };
+    const pull = () => {
+      const raw = parse(input.value);
+      const next = Math.min(max, Math.max(min, raw || min));
+      if (Number(range.value) !== next || range.dataset.ready !== '1') {
+        range.value = String(next);
+        range.dataset.ready = '1';
+      }
+      paint();
+    };
+    range.addEventListener('input', () => {
+      input.value = inputId === 'principal' ? fmt(Number(range.value)) : String(range.value);
+      input.dispatchEvent(new Event('input', {bubbles: true}));
+      paint();
+    });
+    input.addEventListener('input', pull);
+    input.addEventListener('change', pull);
+    sliders.push(pull);
+    pull();
+    return field;
+  };
+
+  buildSlider({
+    inputId: 'principal', min: 10000000, max: 500000000, step: 1000000,
+    parse: digits, format: v => 'Rp ' + fmt(v), label: 'Atur jumlah pinjaman',
+    ticks: [[10000000, 'Rp 10 jt'], [250000000, 'Rp 250 jt'], [500000000, 'Rp 500 jt']]
+  });
+  const tenorField = buildSlider({
+    inputId: 'tenor', min: 12, max: 240, step: 1,
+    parse: v => Number(v) || 0, format: v => v + ' bulan', label: 'Atur jangka waktu',
+    ticks: [[12, '12'], [60, '60'], [120, '120'], [180, '180'], [240, '240']]
+  });
+  if (tenorField) tenorField.classList.add('tenor-card');
+
+  /* Catch programmatic changes (reset, tenor capped by retirement date, "Sesuaikan plafon"). */
+  setInterval(() => {
+    if (document.hidden) return;
+    sliders.forEach(pull => pull());
+  }, 400);
+
+  /* Composition bar: principal vs interest, fed by the calculator's own result. */
+  const card = document.querySelector('.payment-card');
+  const meta = card && card.querySelector('.payment-meta');
+  if (card && meta) {
+    const box = document.createElement('div');
+    box.className = 'k-comp';
+    box.hidden = true;
+    box.innerHTML = '<div class="k-comp-title">Komposisi total bayar</div><div class="k-comp-bar"><i></i><i></i></div><div class="k-comp-legend"><span>Pokok<b data-k="p"></b></span><span>Bunga<b data-k="i"></b></span></div>';
+    meta.before(box);
+    const bars = box.querySelectorAll('.k-comp-bar i');
+    window.addEventListener('kredio:result', event => {
+      const d = event.detail || {};
+      if (!Number.isFinite(d.share)) return;
+      const pct = Math.max(0, Math.min(100, d.share * 100));
+      bars[0].style.width = pct + '%';
+      bars[1].style.width = (100 - pct) + '%';
+      box.querySelector('[data-k="p"]').textContent = d.principal;
+      box.querySelector('[data-k="i"]').textContent = d.interest;
+      box.hidden = false;
+    });
+    const amount = $('paymentAmount');
+    if (amount) {
+      new MutationObserver(() => {
+        if (amount.textContent.trim() === '—') box.hidden = true;
+      }).observe(amount, {childList: true, characterData: true, subtree: true});
+    }
+  }
 })();
 </script>
 </body>
