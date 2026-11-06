@@ -1322,6 +1322,7 @@ const KredioMath = (() => {
     ['tuLoan1Row','tuLoan2Row'].forEach(id=>{$(id).hidden=true;});
     ['tuResultOldPrincipal','tuResultPenalty','tuResultAccrued'].forEach(id=>{$(id).parentElement.hidden=false;});
     ['tuPayment','tuResultMonths','tuDsr','tuResultPrincipal','tuResultOldPrincipal','tuResultPenalty','tuResultAccrued','tuResultOldOther','tuOldTotal','tuResultProvision','tuResultAdmin','tuResultPrint','tuResultInsurance','tuResultBlock','tuResultRefund','tuNet','tuRemainingSalary'].forEach(id=>setText(id,'—'));
+    $('tuPayment').parentElement.classList.remove('compact');
     setText('tuPaymentCaption','');setText('tuNetLabel','Tambahan dana bersih');setText('tuNetNote','');
     ['tuOldOtherRow','tuRefundRow','tuCapacity','tuManualNote','tuNetNote'].forEach(id=>{$(id).hidden=true;});
     ['tuResultProvision','tuResultAdmin','tuResultPrint','tuResultBlock'].forEach(id=>{$(id).parentElement.hidden=false;});
@@ -1398,7 +1399,9 @@ const KredioMath = (() => {
     return true;
   };
   const topRender = r => {
-    setText('tuPayment',rupiahNumber.format(r.instalment));
+    const paymentText=rupiahNumber.format(r.instalment);
+    setText('tuPayment',paymentText);
+    $('tuPayment').parentElement.classList.toggle('compact',paymentText.length>11);
     setText('tuPaymentCaption',`Angsuran pertama ${dateLabel(r.rows[0].date)}`);
     setText('tuResultMonths',`${r.months} bulan`);setText('tuDsr',percentNumber.format(r.totalRatio)+'%');
     const fields={tuResultPrincipal:r.principal,tuResultOldPrincipal:r.oldPrincipal,tuResultPenalty:r.penalty,tuResultAccrued:r.accrued,tuResultOldOther:r.oldOther,tuOldTotal:r.oldTotal,tuResultProvision:r.provision,tuResultAdmin:r.admin,tuResultPrint:r.print,tuResultBlock:r.block,tuNet:r.net,tuRemainingSalary:r.remainingSalary};
@@ -3144,8 +3147,8 @@ button:focus-visible,a:focus-visible,summary:focus-visible{outline:2px solid var
 .payment-label{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#8d8a82;margin:26px 0 12px}
 .payment-value{min-height:0;gap:8px;line-height:1}
 .currency-label{font-size:24px;color:#8d8a82;letter-spacing:0}
-#paymentAmount,#tuPaymentAmount{font-family:Poppins,Arial,sans-serif;font-size:54px;font-weight:500;letter-spacing:-.04em;line-height:1}
-.payment-value.compact #paymentAmount,.payment-value.compact #tuPaymentAmount{font-size:42px}
+#paymentAmount,#tuPayment{font-family:Poppins,Arial,sans-serif;font-size:54px;font-weight:500;letter-spacing:-.04em;line-height:1}
+.payment-value.compact #paymentAmount,.payment-value.compact #tuPayment{font-size:42px}
 .payment-caption{font-size:13px;color:#8d8a82;margin:12px 0 22px}
 .payment-meta{border-top-color:#2c2c2a;padding-top:20px}
 .payment-meta span{font-size:12px;color:#8d8a82}
@@ -3226,8 +3229,8 @@ footer{border-top-color:var(--line);color:var(--muted)}
 @media(max-width:1100px){
 .app-shell{width:calc(100% - 64px)}
 .workspace{grid-template-columns:minmax(0,1fr) 400px;gap:32px}
-#paymentAmount,#tuPaymentAmount{font-size:44px}
-.payment-value.compact #paymentAmount,.payment-value.compact #tuPaymentAmount{font-size:36px}
+#paymentAmount,#tuPayment{font-size:44px}
+.payment-value.compact #paymentAmount,.payment-value.compact #tuPayment{font-size:36px}
 }
 @media(max-width:940px){
 .app-shell{width:calc(100% - 48px)}
@@ -3253,8 +3256,8 @@ footer{border-top-color:var(--line);color:var(--muted)}
 .page-heading h1{font-size:clamp(28px,8vw,34px)}
 .page-heading .eyebrow{font-size:10px}
 .payment-card{padding:24px 24px 22px;border-radius:28px}
-#paymentAmount,#tuPaymentAmount{font-size:40px}
-.payment-value.compact #paymentAmount,.payment-value.compact #tuPaymentAmount{font-size:32px}
+#paymentAmount,#tuPayment{font-size:40px}
+.payment-value.compact #paymentAmount,.payment-value.compact #tuPayment{font-size:32px}
 .currency-label{font-size:20px}
 .breakdown-card,.topup-form,#newCreditPane .form-card{padding:22px 22px}
 .principal-field{padding:18px 20px 20px}
@@ -3283,7 +3286,7 @@ footer{border-top-color:var(--line);color:var(--muted)}
 .bank-jambi-mark img{width:84px}
 .bank-jambi-mark{padding-left:8px}
 .brand>span{font-size:21px}
-#paymentAmount,#tuPaymentAmount{font-size:36px}
+#paymentAmount,#tuPayment{font-size:36px}
 }
 }
 </style>
