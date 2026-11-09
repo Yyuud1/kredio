@@ -504,6 +504,14 @@ body.kredio-locked{background:#f7f7f7}
 <div class="form-bottom"><div class="rate-inline"><span>Bunga anuitas</span><strong id="tuRatePreview">12,25%<small> / tahun</small></strong></div><button type="submit" class="primary-button">Hitung Top Up <i class="fi fi-rr-arrow-small-right" aria-hidden="true"></i></button></div>
 </form></section>
 <aside class="topup-result" id="topUpResult" aria-label="Hasil Top Up"><section class="payment-card"><div class="payment-top"><span id="tuResultProduct">PPPK · KKS72</span><i class="fi fi-rr-calculator" aria-hidden="true"></i></div><p class="payment-label">Angsuran per bulan</p><div class="payment-value"><span class="currency-label">Rp</span><span id="tuPayment">—</span></div><p class="payment-caption" id="tuPaymentCaption"></p><div class="payment-meta"><div><span>Tenor</span><strong id="tuResultMonths">—</strong></div><div><span id="tuRatioLabel">DSR total</span><strong id="tuDsr">—</strong></div></div></section>
+<section class="tu-dsr-panel" id="tuDsrPanel" hidden aria-labelledby="tuDsrTitle">
+  <div class="tu-dsr-row">
+    <div class="tu-dsr-figure"><span id="tuDsrTitle">DSR total</span><strong id="tuDsrVisible">—</strong></div>
+    <div class="tu-dsr-side"><strong id="tuDsrStatus">—</strong><span id="tuDsrLimit">Batas total —</span></div>
+  </div>
+  <div class="tu-dsr-track" aria-hidden="true"><span id="tuDsrProgress"></span></div>
+  <p class="tu-dsr-note" id="tuDsrNote"></p>
+</section>
 <section class="breakdown-card" id="tuBreakdown"><div class="section-heading"><h2>Rincian pencairan</h2><span class="section-index">02</span></div><dl class="fee-list"><div><dt>Plafon baru</dt><dd id="tuResultPrincipal">—</dd></div><div><dt>Pokok kredit lama</dt><dd id="tuResultOldPrincipal">—</dd></div><div><dt>Penalti</dt><dd id="tuResultPenalty">—</dd></div><div><dt>Bunga akrual</dt><dd id="tuResultAccrued">—</dd></div><div id="tuOldOtherRow" hidden><dt>Tunggakan / biaya lain</dt><dd id="tuResultOldOther">—</dd></div><div id="tuLoan1Row" hidden><dt>Pelunasan kredit 1</dt><dd id="tuLoan1Total">—</dd></div><div id="tuLoan2Row" hidden><dt>Pelunasan kredit 2</dt><dd id="tuLoan2Total">—</dd></div><div><dt><strong>Total pelunasan lama</strong></dt><dd id="tuOldTotal">—</dd></div><div><dt>Provisi</dt><dd id="tuResultProvision">—</dd></div><div><dt>Administrasi</dt><dd id="tuResultAdmin">—</dd></div><div><dt>Biaya cetak</dt><dd id="tuResultPrint">—</dd></div><div><dt>Asuransi</dt><dd id="tuResultInsurance">—</dd></div><div><dt>Dana blokir</dt><dd id="tuResultBlock">—</dd></div><div id="tuRefundRow" hidden><dt>Pengembalian blokir/angsuran</dt><dd id="tuResultRefund">—</dd></div></dl><div class="net-cash"><div><span id="tuNetLabel">Tambahan dana bersih</span><i class="fi fi-rr-wallet" aria-hidden="true"></i></div><strong id="tuNet">—</strong><p id="tuNetNote" hidden></p></div><div class="salary-remainder"><span>Sisa gaji / bulan</span><strong id="tuRemainingSalary">—</strong></div><div class="cost-detail" id="topCostDetails" hidden></div></section>
 <div class="capacity-panel" id="tuCapacity" hidden><div class="capacity-copy"><span class="capacity-status"><i class="fi fi-rr-check-circle" aria-hidden="true"></i><span id="tuCapacityLabel">Dalam batas DSR</span></span><p id="tuCapacityDetail"></p></div></div><p class="topup-warning" id="tuManualNote" hidden>Cek gaji pokok di slip gaji. Pelunasan final dari T24.</p><div class="result-actions" id="tuActions"><button type="button" class="secondary-button" id="tuSchedule" disabled><i class="fi fi-rr-calendar" aria-hidden="true"></i>Jadwal angsuran</button><button type="button" class="secondary-button" id="tuPrint" disabled><i class="fi fi-rr-print" aria-hidden="true"></i>Cetak</button><button type="button" class="secondary-button" id="tuPdf" disabled>Unduh PDF</button></div>
 </aside></div></section>
@@ -1318,6 +1326,9 @@ const KredioMath = (() => {
   };
   const topResetResult = () => {
     state.topUpResult=null;
+    $('tuDsrPanel').hidden=true;
+    $('tuDsrPanel').classList.remove('over');
+    $('tuDsrProgress').style.width='0%';
     $('topCostDetails').hidden=true;
     ['tuLoan1Row','tuLoan2Row'].forEach(id=>{$(id).hidden=true;});
     ['tuResultOldPrincipal','tuResultPenalty','tuResultAccrued'].forEach(id=>{$(id).parentElement.hidden=false;});
@@ -1404,6 +1415,16 @@ const KredioMath = (() => {
     $('tuPayment').parentElement.classList.toggle('compact',paymentText.length>11);
     setText('tuPaymentCaption',`Angsuran pertama ${dateLabel(r.rows[0].date)}`);
     setText('tuResultMonths',`${r.months} bulan`);setText('tuDsr',percentNumber.format(r.totalRatio)+'%');
+    const dsrLimit = r.product==='pns' ? 95 : 70;
+    setText('tuDsrVisible',percentNumber.format(r.totalRatio)+'%');
+    setText('tuDsrLimit',`Batas total ${dsrLimit}%`);
+    setText('tuDsrStatus',r.withinCapacity?'Dalam batas':r.product==='pns'?'Perlu penyesuaian':'Melebihi batas');
+    setText('tuDsrNote',(r.product==='pns'
+      ? `Batas angsuran baru ${r.extraIncome?'95':'80'}% gaji. `
+      : '')+'DSR mencakup angsuran baru, angsuran lain, dan biaya tambahan bulanan. Kredit lama yang dilunasi tidak dihitung.');
+    $('tuDsrProgress').style.width=Math.max(0,Math.min(100,r.totalRatio/dsrLimit*100))+'%';
+    $('tuDsrPanel').classList.toggle('over',!r.withinCapacity);
+    $('tuDsrPanel').hidden=false;
     const fields={tuResultPrincipal:r.principal,tuResultOldPrincipal:r.oldPrincipal,tuResultPenalty:r.penalty,tuResultAccrued:r.accrued,tuResultOldOther:r.oldOther,tuOldTotal:r.oldTotal,tuResultProvision:r.provision,tuResultAdmin:r.admin,tuResultPrint:r.print,tuResultBlock:r.block,tuNet:r.net,tuRemainingSalary:r.remainingSalary};
     Object.entries(fields).forEach(([id,value])=>setText(id,money(value)));
     setText('tuResultInsurance',r.insurance===null?'Belum diisi':money(r.insurance));
@@ -3289,6 +3310,21 @@ footer{border-top-color:var(--line);color:var(--muted)}
 #paymentAmount,#tuPayment{font-size:36px}
 }
 }
+#topUpResult .tu-dsr-panel{background:var(--white);border:1px solid var(--line);border-radius:22px;padding:21px 24px;min-width:0}
+#topUpResult .tu-dsr-panel[hidden]{display:none!important}
+#topUpResult .tu-dsr-row{display:flex;justify-content:space-between;align-items:center;gap:14px}
+#topUpResult .tu-dsr-figure{display:flex;flex-direction:column;gap:3px}
+#topUpResult .tu-dsr-figure>span{color:var(--muted);font-size:12px;font-weight:500}
+#topUpResult .tu-dsr-figure>strong{font-size:29px;font-weight:600;letter-spacing:-.045em;line-height:1.3;font-variant-numeric:tabular-nums}
+#topUpResult .tu-dsr-side{display:flex;flex-direction:column;align-items:flex-end;gap:5px;text-align:right}
+#topUpResult .tu-dsr-side>strong{font-size:12px;font-weight:600;color:var(--ink)}
+#topUpResult .tu-dsr-side>span{font-size:11px;color:var(--muted)}
+#topUpResult .tu-dsr-track{height:6px;margin-top:15px;border-radius:20px;background:#eae8e2;overflow:hidden}
+#topUpResult .tu-dsr-track>span{display:block;width:0;height:100%;border-radius:20px;background:var(--ink);transition:width .3s ease}
+#topUpResult .tu-dsr-note{margin:10px 0 0;color:var(--muted);font-size:10px;line-height:1.65}
+#topUpResult .tu-dsr-panel.over .tu-dsr-side>strong,#topUpResult .tu-dsr-panel.over .tu-dsr-figure>strong{color:var(--danger)}
+#topUpResult .tu-dsr-panel.over .tu-dsr-track>span{background:var(--danger)}
+@media(max-width:730px){#topUpResult .tu-dsr-panel{padding:18px 20px}#topUpResult .tu-dsr-figure>strong{font-size:27px}}
 </style>
 <script id="kredio-redesign-script">
 (() => {
