@@ -3539,8 +3539,19 @@ html[data-theme="dark"] #remainingSalary,html[data-theme="dark"] #tuRemainingSal
 .theme-toggle .ic{display:none}
 html[data-mode="auto"] .theme-toggle .ic-auto,html[data-mode="light"] .theme-toggle .ic-light,html[data-mode="dark"] .theme-toggle .ic-dark{display:block}
 /* layar masuk & splash */
-html[data-theme="dark"] .entry-loader{background:var(--paper);color:var(--ink)}
-html[data-theme="dark"] .entry-loader *{color:inherit}
+html[data-theme="dark"] .entry-loader{background:var(--paper)}
+html[data-theme="dark"] .entry-word{color:var(--ink)}
+html[data-theme="dark"] .entry-i,html[data-theme="dark"] .entry-period{color:transparent}
+html[data-theme="dark"] .entry-i::before{background:var(--ink)}
+html[data-theme="dark"] .entry-ball{border-color:var(--ink)}
+html[data-theme="dark"] .entry-ball-shadow{background:#000;opacity:.5}
+html[data-theme="dark"] .access-brand{color:var(--ink)}
+html[data-theme="dark"] .access-brand span{color:#55534d}
+html[data-theme="dark"] .access-card label{color:var(--muted)}
+html[data-theme="dark"] .access-card input:focus{border-color:#55534d;box-shadow:0 0 0 4px #ecebe50f}
+html[data-theme="dark"] .access-card input::placeholder{color:#5f5d57}
+html[data-theme="dark"] .access-card input[aria-invalid="true"]{border-color:var(--danger)}
+html[data-theme="dark"] .access-error{color:var(--danger)}
 html[data-theme="dark"] .access-card input,html[data-theme="dark"] #kredioUsername{background:#1d1d1b;color:var(--ink);border-color:var(--line)}
 /* kolom isian di Data Entry, Masa Kerja, dan menu lain */
 html[data-theme="dark"] .entry-workspace :is(input,select,textarea),html[data-theme="dark"] .work-cell input,html[data-theme="dark"] #tuEmployment,html[data-theme="dark"] #tuSlik,html[data-theme="dark"] #tuPromoAdmin{background:#1d1d1b;color:var(--ink);border-color:var(--line)}
@@ -3555,6 +3566,19 @@ html[data-theme="dark"] .close-dialog{background:var(--soft);color:var(--ink);bo
 html[data-theme="dark"] .source-note{background:var(--soft);color:var(--muted);border-color:var(--line)}
 html[data-theme="dark"] .swal2-popup{background:#171716;color:var(--ink)}
 html[data-theme="dark"] .swal2-title,html[data-theme="dark"] .swal2-html-container{color:var(--ink)}
+/* History */
+html[data-theme="dark"] dialog{background:#171716;color:var(--ink)}
+html[data-theme="dark"] .history-notice{background:var(--soft);color:var(--muted)}
+html[data-theme="dark"] .history-table th{background:#1d1d1b;color:var(--muted)}
+html[data-theme="dark"] .history-type,html[data-theme="dark"] .history-table time span,html[data-theme="dark"] .history-state,html[data-theme="dark"] .history-count{color:#77746d}
+html[data-theme="dark"] .history-table-wrap{scrollbar-color:#3a3a36 transparent}
+html[data-theme="dark"] dialog{border-color:var(--line)}
+html[data-theme="dark"] .icon-button{background:var(--soft);color:var(--ink);border-color:var(--line)}
+html[data-theme="dark"] .icon-button:hover:not(:disabled){background:#2c2c29}
+html[data-theme="dark"] .swal2-toast{border-color:var(--line)!important;box-shadow:0 8px 24px #00000066}
+html[data-theme="dark"] .swal2-toast :is(.swal2-title,.swal2-html-container){color:var(--ink)}
+html[data-theme="dark"] .swal2-timer-progress-bar{background:#3a3a36}
+html[data-theme="dark"] .swal2-popup.swal2-toast :is(.swal2-title,.swal2-html-container){color:var(--ink)!important}
 }
 </style>
 <script id="kredio-theme-script">(function(){var root=document.documentElement,btn=document.getElementById('themeToggle');if(!btn)return;var mq=window.matchMedia?matchMedia('(prefers-color-scheme: dark)'):null;var names={auto:'Tema: otomatis (ikut perangkat)',light:'Tema: terang',dark:'Tema: gelap'};function mode(){return root.getAttribute('data-mode')||'auto'}function apply(m){var d=m==='dark'||(m==='auto'&&mq&&mq.matches);root.setAttribute('data-mode',m);root.setAttribute('data-theme',d?'dark':'light');btn.title=names[m];btn.setAttribute('aria-label',names[m]+'. Klik untuk ganti.')}btn.addEventListener('click',function(){var next={auto:'dark',dark:'light',light:'auto'}[mode()];try{localStorage.setItem('kredio-theme',next)}catch(e){}apply(next)});if(mq){var on=function(){if(mode()==='auto')apply('auto')};if(mq.addEventListener)mq.addEventListener('change',on);else if(mq.addListener)mq.addListener(on)}apply(mode())})();</script>
